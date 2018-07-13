@@ -21,5 +21,4 @@
 	<resultMap type="ProductType" id="SuperResultMap" extends="BaseResultMap">
 		<association property="product" resultMap="com.shopping.dao.ProductDao.SuperResultMap" />
 	</resultMap>
-
 </mapper>

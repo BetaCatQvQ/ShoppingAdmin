@@ -17,5 +17,59 @@
 	<resultMap type="Product" id="SuperResultMap" extends="BaseResultMap">
 		<association property="categoryThree" resultMap="com.shopping.dao.CategoryThreeDao.SuperResultMap" />
 	</resultMap>
+	
+	<!-- <if test="stuName != null and stuName != ''">
+				and stuName like concat('%', #{stuName}, '%')
+			</if> -->
+			<!-- <if test="gradeId != null and gradeId != 0">
+				and g.gradeId=#{gradeId}
+			</if> -->
+			
+			<!-- @Param("page") Page<Product> page,
+			@Param("productId") Integer productId,
+			@Param("productName") String productName,
+			@Param("firstDate") Date firstDate,
+			@Param("lastDate") Date lastDate); -->
+			
+	<sql id="selectCondition">
+		<where>
+			<if test = "productId != null and productId != 0">
+				and productId = #{productId}
+			</if>
+			<if test = "productName != null and productName != ''">
+				and productName like concat ('%',#{stuName},'%')
+			</if>
+			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
+				and productCreateDate between #{firstDate} and #{lastDate}
+			</if>
+			<if test = "categoryThreeId != null and categoryThreeId != 0">
+				and categoryThreeId = #{categoryThreeId}
+			</if>
+		</where>
+	</sql>
+	
+	<insert id = "add">
+		insert into product values(#{productId},#{productThreeId},#{productName},#{productCreateDate})
+	</insert>
+	
+	<update id = "update">
+		update product set productName = #{productName},productCreateDate = now() where productId = #{productId}
+	</update>
+	
+	<delete id= "delete">
+		delete from product set productId = #{productId}
+	</delete>
 
+	<select id="getProducts">
+		select * from product 
+		<include refid = "selectCondition" />
+		order by productId asc
+		
+		limit #{page.firstIndex},#{page.pageSize}
+	</select>
+	
+	<select id="getCount">
+		select count(1) from product
+		<include refid = "selectCondition" />
+	</select>
 </mapper>
