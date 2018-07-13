@@ -8,11 +8,20 @@
 		<id column="categoryOneId" property="categoryOneId" />
 		<result column="categoryOneName" property="categoryOneName" />
 	</resultMap>
-	
-	<resultMap type="CategoryOne" id="FullResultMap" extends="BaseResultMap">
-	</resultMap>
-
-	<resultMap type="CategoryOne" id="SuperResultMap" extends="BaseResultMap">
-	</resultMap>
-	
+	<!-- sql -->
+	<select id="getCateOne" resultMap="BaseResultMap">
+		SELECT * FROM categoryone
+	</select>
+	<insert id="addCateOne">
+		INSERT INTO categoryone (categoryOneName) VALUES (#{categoryOne.categoryOneName})
+	</insert>
+	<delete id="delCateOne">
+		DELETE FROM categoryone WHERE categoryOneId = #{delId}
+	</delete>
+	<update id="uptCateOne">
+		UPDATE categoryone SET categoryOneName = #{categoryOne.categoryOneName} WHERE categoryOneId =#{categoryOne.categoryOneId}
+	</update>
+	<select id="getCateOneById" resultMap="BaseResultMap">
+		SELECT * FROM categoryone WHERE categoryOneId = #{categoryOneId}
+	</select>
 </mapper>

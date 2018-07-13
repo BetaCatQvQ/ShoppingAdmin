@@ -12,9 +12,20 @@
 	<resultMap type="CategoryTwo" id="FullResultMap" extends="BaseResultMap">
 		<association property="categoryOne" resultMap="com.shopping.dao.CategoryOneDao.BaseResultMap" />
 	</resultMap>
-
-	<resultMap type="CategoryTwo" id="SuperResultMap" extends="BaseResultMap">
-		<association property="categoryOne" resultMap="com.shopping.dao.CategoryOneDao.SuperResultMap" />
-	</resultMap>
-	
+	<!-- sql -->
+	<select id="getCateTwo" resultMap="FullResultMap">
+		SELECT * FROM categoryTwo
+	</select>
+	<insert id="addCateTwo">
+		INSERT INTO categoryTwo (categoryOneId,categoryTwoName) VALUES (#{categoryTwo.categoryOne.categoryOneId},#{categoryTwo.categoryTwoName})
+	</insert>
+	<delete id="delCateTwo">
+		DELETE FROM categoryTwo WHERE categoryTwoId = #{delId}
+	</delete>
+	<update id="uptCateTwo">
+		UPDATE categoryTwo SET categoryTwoName = #{categoryTwo.categoryTwoName} WHERE categoryTwoId =#{categoryTwo.categoryTwoId}
+	</update>
+	<select id="getCateTwoById" resultMap="BaseResultMap">
+		SELECT * FROM categorytwo WHERE categoryTwoId = #{categoryTwoId}
+	</select>
 </mapper>

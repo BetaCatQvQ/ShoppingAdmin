@@ -39,4 +39,10 @@ public class CategoryThree {
 		this.categoryThreeName = categoryThreeName;
 	}
 
+	@Override
+	public String toString() {
+		return "CategoryThree [categoryThreeId=" + categoryThreeId + ", categoryTwo=" + categoryTwo
+				+ ", categoryThreeName=" + categoryThreeName + "]";
+	}
+
 }
