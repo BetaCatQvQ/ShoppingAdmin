@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.shopping.entity.CategoryThree;
 import com.shopping.entity.CategoryTwo;
+import com.shopping.entity.Page;
 import com.shopping.service.CategoryThreeService;
 import com.shopping.service.CategoryTwoService;
 import com.shopping.util.SpringTool;
@@ -18,10 +19,8 @@ public class CategoryThreeServiceImplTest {
 
 	@Test
 	public void testGetCateThreeList() throws Exception {
-		List<CategoryThree> ctThrees = userServiceThree.getCateThreeList();
-		for (CategoryThree categoryThree : ctThrees) {
-			System.out.println("===========Three=============" + categoryThree.toString());
-		}
+		Page<CategoryTwo> cPage = new Page<CategoryTwo>();
+		userServiceThree.getCateThreeList(cPage);
 	}
 
 	@Test

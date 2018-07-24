@@ -1,11 +1,12 @@
 package com.shopping.service;
 
-import java.util.List;
-
 import com.shopping.entity.CategoryOne;
+import com.shopping.entity.Page;
 
 public interface CategoryOneService {
-	public List<CategoryOne> getCateOneList();
+	public void getCateOneList(Page page);
+	
+	public void search(String categoryOneName,Page page);
 	
 	public CategoryOne getCateOneById(Integer categoryOneId);
 

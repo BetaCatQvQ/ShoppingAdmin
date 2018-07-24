@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.shopping.dao.CategoryOneDao;
 import com.shopping.entity.CategoryOne;
+import com.shopping.entity.Page;
 import com.shopping.service.CategoryOneService;
 
 @Service
@@ -16,8 +17,11 @@ public class CategoryOneServiceImpl implements CategoryOneService{
 	private CategoryOneDao coDao;
 
 	@Override
-	public List<CategoryOne> getCateOneList() {
-		return coDao.getCateOne();
+	public void getCateOneList(Page page) {
+		Integer rowCount = coDao.getRowsCountByPage();
+		page.setRowCount(rowCount);
+		List<CategoryOne> categoryOnes=  coDao.getCateOne(page);
+		page.setData(categoryOnes);
 	}
 
 	@Override
@@ -38,5 +42,13 @@ public class CategoryOneServiceImpl implements CategoryOneService{
 	@Override
 	public CategoryOne getCateOneById(Integer categoryOneId) {
 		return coDao.getCateOneById(categoryOneId);
+	}
+
+	@Override
+	public void search(String categoryOneName,Page page) {
+		Integer rowCount = coDao.getRowsCountToPageByCategoryName(categoryOneName);
+		page.setRowCount(rowCount);
+		List<CategoryOne> categoryOnes=  coDao.getCateOne(page);
+		page.setData(categoryOnes);
 	}
 }

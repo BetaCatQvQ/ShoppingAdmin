@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.shopping.entity.CategoryOne;
+import com.shopping.entity.Page;
 import com.shopping.service.CategoryOneService;
 import com.shopping.util.SpringTool;
 
@@ -13,10 +14,9 @@ public class CategoryOneServiceImplTest {
 	
 	@Test
 	public void testGetCateOneList() throws Exception {
-		List<CategoryOne> caList = userService.getCateOneList();
-		for (CategoryOne categoryOne : caList) {
-			System.out.println("==========一级分类==========="+categoryOne.toString());
-		}
+		Page<CategoryOne> page = new Page<CategoryOne>();
+		userService.getCateOneList(page);
+		
 	}
 	@Test
 	public void testAddCateOne() throws Exception {
@@ -37,5 +37,11 @@ public class CategoryOneServiceImplTest {
 		categoryOne.setCategoryOneName("家电");
 		Integer result = userService.uptCateOne(categoryOne);
 			System.out.println("==========result==========="+result);
+	}
+	@Test
+	public void testSearch() throws Exception {
+		String categoryOneName = "家";
+		Page<CategoryOne> cPage = new Page<CategoryOne>();
+		userService.search(categoryOneName,cPage);
 	}
 }

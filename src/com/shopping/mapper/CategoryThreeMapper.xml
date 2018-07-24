@@ -19,7 +19,10 @@
 	
 	<!-- sql -->
 	<select id="getCateThree" resultMap="FullResultMap">
-		SELECT * FROM categoryThree
+		SELECT categoryThree.categoryThreeId,categoryThree.categoryThreeName FROM categoryThree 
+		order by categoryThree.categoryThreeId ASC
+		limit  
+		#{page.firstIndex},#{page.pageSize}
 	</select>
 	<insert id="addCateThree">
 		INSERT INTO categoryThree(categoryTwoId,categoryThreeName) VALUE (#{categoryThree.categoryTwo.categoryTwoId},#{categoryThree.categoryThreeName})
@@ -30,4 +33,17 @@
 	<update id="uptCateThree">
 		UPDATE categoryThree SET categoryThreeName = #{categoryThree.categoryThreeName} WHERE categoryThreeId =#{categoryThree.categoryThreeId}
 	</update>
+	<select id="getRowsCountByPage" resultType="Integer">
+		SELECT COUNT(1) FROM categoryThree
+	</select>
+	<select id="Search" resultMap="BaseResultMap">
+		SELECT categoryThree.categoryThreeId,categoryThree.categoryThreeName FROM categoryThree 
+		HAVING categoryThreeName like '%${categoryThreeName}%'
+		order by categoryThree.categoryThreeId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
+		SELECT COUNT(1) FROM categoryThree WHERE categoryThree.categoryThreeName like '%${categoryThreeName}%'
+	</select>
 </mapper>

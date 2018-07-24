@@ -19,6 +19,12 @@
 	</resultMap>
 
 	<select id="commonUserLogin" resultMap="BaseResultMap">
-		SELECT * FROM `user` AS u WHERE u.`userName` = #{username} AND u.`userPwd` = #{pwd} AND u.`role` = 0;
+		SELECT * FROM `user` AS u WHERE u.`userName` = #{username} AND u.`userPwd` = #{pwd} AND u.`role` = 0
+	</select>
+	<select id="adminUserLogin" resultMap="BaseResultMap">
+		SELECT * FROM `user` AS u WHERE u.`userName` = #{username} AND u.`userPwd` = #{pwd} AND u.`role` = 1
+	</select>
+	<select id="adminUserAdd" resultType="Integer">
+		INSERT INTO `user` (userId,userName,userPwd,`role`) VALUES (#{user.userId},#{user.userName},#{userPwd},#{user.role})
 	</select>
 </mapper>

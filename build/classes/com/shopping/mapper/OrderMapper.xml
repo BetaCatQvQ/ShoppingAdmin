@@ -16,5 +16,11 @@
 	<resultMap type="Order" id="SuperResultMap" extends="BaseResultMap">
 		<association property="user" resultMap="com.shopping.dao.UserDao.SuperResultMap" />
 	</resultMap>
-
+	<!-- SQL -->
+	<select id="listOrder" resultType="Map">
+		SELECT `or`.orderId,oi.orderItemId,u.userName,oi.remark,`or`.orderCreateDate,oi.status 
+		FROM `order` `or`,orderItem oi,`user` u 
+		WHERE `or`.userId = u.userId 
+		AND oi.orderId  = `or`.orderId
+	</select>
 </mapper>

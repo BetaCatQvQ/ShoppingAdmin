@@ -10,18 +10,34 @@
 	</resultMap>
 	<!-- sql -->
 	<select id="getCateOne" resultMap="BaseResultMap">
-		SELECT * FROM categoryone
+		SELECT categoryOne.categoryoneId,categoryOne.categoryOneName FROM categoryOne
+		order by categoryOne.categoryOneId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
 	</select>
 	<insert id="addCateOne">
-		INSERT INTO categoryone (categoryOneName) VALUES (#{categoryOne.categoryOneName})
+		INSERT INTO categoryOne (categoryOneName) VALUES (#{categoryOne.categoryOneName})
 	</insert>
 	<delete id="delCateOne">
-		DELETE FROM categoryone WHERE categoryOneId = #{delId}
+		DELETE FROM categoryOne WHERE categoryOneId = #{delId}
 	</delete>
 	<update id="uptCateOne">
-		UPDATE categoryone SET categoryOneName = #{categoryOne.categoryOneName} WHERE categoryOneId =#{categoryOne.categoryOneId}
+		UPDATE categoryOne SET categoryOneName = #{categoryOne.categoryOneName} WHERE categoryOneId =#{categoryOne.categoryOneId}
 	</update>
 	<select id="getCateOneById" resultMap="BaseResultMap">
-		SELECT * FROM categoryone WHERE categoryOneId = #{categoryOneId}
+		SELECT * FROM categoryOne WHERE categoryOneId = #{categoryOneId}
+	</select>
+	<select id="getRowsCountByPage" resultType="Integer">
+		SELECT COUNT(1) FROM categoryOne
+	</select>
+	<select id="Search" resultMap="BaseResultMap">
+		SELECT categoryOne.categoryOneId,categoryOne.categoryOneName FROM categoryOne 
+		HAVING categoryOneName like '%${categoryOneName}%'
+		order by categoryOne.categoryOneId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
+		SELECT COUNT(1) FROM categoryOne WHERE categoryOne.categoryOneName like '%${categoryOneName}%'
 	</select>
 </mapper>

@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.shopping.dao.CategoryTwoDao;
+import com.shopping.entity.CategoryOne;
 import com.shopping.entity.CategoryTwo;
+import com.shopping.entity.Page;
 import com.shopping.service.CategoryTwoService;
 @Service
 public class CategoryTwoServiceImpl implements CategoryTwoService{
@@ -15,8 +17,11 @@ public class CategoryTwoServiceImpl implements CategoryTwoService{
 	private CategoryTwoDao ctDao;
 
 	@Override
-	public List<CategoryTwo> getCateTwoList() {
-		return ctDao.getCateTwo();
+	public void getCateTwoList(Page page) {
+		Integer rowCount = ctDao.getRowsCountByPage();
+		page.setRowCount(rowCount);
+		List<CategoryTwo> categoryTwos=  ctDao.getCateTwo(page);
+		page.setData(categoryTwos);;
 	}
 
 	@Override
@@ -37,5 +42,14 @@ public class CategoryTwoServiceImpl implements CategoryTwoService{
 	@Override
 	public CategoryTwo getCateTwoById(Integer categoryTwoId) {
 		return ctDao.getCateTwoById(categoryTwoId);
+	}
+
+	@Override
+	public void search(String categoryTwoName,Page page) {
+		Integer rowCount = ctDao.getRowsCountToPageByCategoryName(categoryTwoName);
+		page.setRowCount(rowCount);
+		List<CategoryTwo> categoryTwos=  ctDao.getCateTwo(page);
+		page.setData(categoryTwos);
+
 	}
 }

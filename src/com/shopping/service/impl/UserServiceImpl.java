@@ -17,4 +17,14 @@ public class UserServiceImpl implements UserService {
 	public User commonUserLogin(String username, String pwd) {
 		return uDao.commonUserLogin(username, pwd);
 	}
+
+	@Override
+	public Integer adminUserAdd(User user) {
+		return uDao.adminUserAdd(user);
+	}
+
+	@Override
+	public User adminUserLogin(String UserName, String pwd) {
+		return uDao.adminUserLogin(UserName, pwd);
+	}
 }

@@ -5,7 +5,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.shopping.entity.CategoryOne;
+import com.shopping.entity.CategoryThree;
 import com.shopping.entity.CategoryTwo;
+import com.shopping.entity.Page;
 import com.shopping.service.CategoryOneService;
 import com.shopping.service.CategoryTwoService;
 import com.shopping.util.SpringTool;
@@ -16,10 +18,8 @@ public class CategoryTwoServiceImplTest {
 	
 	@Test
 	public void testGetCateTwoList() throws Exception {
-		List<CategoryTwo> caList = userServicetwo.getCateTwoList();
-		for (CategoryTwo categoryTwo : caList) {
-			System.out.println("==========二级分类==========="+categoryTwo.toString());
-		}
+		Page<CategoryThree> cPage = new Page<CategoryThree>();
+		userServicetwo.getCateTwoList(cPage);
 	}
 	@Test
 	public void testAddCateTwo() throws Exception {

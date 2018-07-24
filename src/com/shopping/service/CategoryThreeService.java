@@ -1,11 +1,12 @@
 package com.shopping.service;
 
-import java.util.List;
-
 import com.shopping.entity.CategoryThree;
+import com.shopping.entity.Page;
 
 public interface CategoryThreeService {
-	public List<CategoryThree> getCateThreeList();
+	public void getCateThreeList(Page page);
+	
+	public void search(String categoryThreeName,Page page);
 
 	public Integer addCateThree(CategoryThree categoryThree);
 
