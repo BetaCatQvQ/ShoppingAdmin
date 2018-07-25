@@ -16,8 +16,8 @@
 <!-- Custom Styles-->
 <link href="../assets/css/custom-styles.css" rel="stylesheet" />
 <!-- Google Fonts-->
-<link href='https://fonts.googleapis.com/css?family=Open+Sans'
-	rel='stylesheet' type='text/css' />
+<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans'
+	rel='stylesheet' type='text/css' /> -->
 <!-- TABLE STYLES-->
 <link href="../assets/js/dataTables/dataTables.bootstrap.css"
 	rel="stylesheet" />
@@ -72,7 +72,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 										分类选择<span class="caret"></span>
 									</a>
-									<ul class="dropdown-menu">
+									<ul class="dropdown-menu categoryMenu">
 										<li><a href="javascript:void(0)"
 											onclick="getCategoryOne()">一级分类</a></li>
 										<li><a href="javascript:void(0)"
@@ -87,10 +87,10 @@
 									<div class="row">
 										<div class="col-sm-4">
 											<div class="dataTables_length" id="dataTables-example_length">
-												<label> <select style="display: block;"
+												<label> <select onclick = "getByPage()" style="display: block;"
 													name="dataTables-example_length"
 													aria-controls="dataTables-example"
-													class="form-control input-sm"><option value="10">10</option>
+													class="form-control input-sm selectPage"><option value="10">10</option>
 														<option value="25">25</option>
 														<option value="50">50</option>
 														<option value="100">100</option></select><small>records per
@@ -103,7 +103,7 @@
 											<div class="input-group">
 												<input type="text" class="form-control"> <span
 													class="input-group-btn">
-													<button class="btn btn-default" type="button">Search!
+													<button class="btn btn-default" type="button" onclick="window.location.href='?search='">Search!
 													</button>
 												</span>
 											</div>
@@ -122,19 +122,19 @@
 												<th>属性管理</th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody id="categoryTable">
 											<c:forEach items="${page.data}" var="c" varStatus="i">
 												<tr>
-													<td id="${i.count }Id">${c.categoryOneId}</td>
-													<td id="${i.count }Name">${c.categoryOneName}</td>
+													<td id="Id">${c.categoryOneId}</td>
+													<td id="Name">${c.categoryOneName}</td>
 
-													<td id="${i.count }edit"><a
+													<td id="edit"><a
 														href="editCategory.action?id=${c.categoryOneId}"><span
 															class="glyphicon glyphicon-th-list"></span></a></td>
-													<td id="${i.count }listProduct"><a
+													<td id="listProduct"><a
 														href="listProduct?category_id=${c.categoryOneId}"><span
 															class="glyphicon glyphicon-shopping-cart"></span></a></td>
-													<td id="${i.count }listProperty"><a
+													<td id="listProperty"><a
 														href="listProperty?category_id=${c.categoryOneId}"><span
 															class="glyphicon glyphicon-edit"></span></a></td>
 												</tr>
@@ -160,9 +160,9 @@
 	Bootstrap Js
 	<script src="../assets/js/bootstrap.min.js"></script>
 	Metis Menu Js
-	<script src="../assets/js/jquery.metisMenu.js"></script>
-	jquery.listCategory.js
-	<script src="../assets/js/dataTables/jquery.listCategory.js"></script>
+	<!-- <script src="../assets/js/jquery.metisMenu.js"></script> -->
+	Dropdown_Search_row.js
+	<script src="../assets/js/dataTables/Dropdown_Search_row.js"></script>
 	DATA TABLE SCRIPTS
 	<!-- <script src="../assets/js/dataTables/jquery.dataTables.js"></script> -->
 	<!-- <script src="../assets/js/dataTables/dataTables.bootstrap.js"></script> -->
