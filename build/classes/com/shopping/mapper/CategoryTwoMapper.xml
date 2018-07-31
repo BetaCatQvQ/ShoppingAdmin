@@ -12,9 +12,36 @@
 	<resultMap type="CategoryTwo" id="FullResultMap" extends="BaseResultMap">
 		<association property="categoryOne" resultMap="com.shopping.dao.CategoryOneDao.BaseResultMap" />
 	</resultMap>
-
-	<resultMap type="CategoryTwo" id="SuperResultMap" extends="BaseResultMap">
-		<association property="categoryOne" resultMap="com.shopping.dao.CategoryOneDao.SuperResultMap" />
-	</resultMap>
-	
+	<!-- sql -->
+	<select id="getCateTwo" resultMap="FullResultMap">
+		SELECT categoryTwo.categoryTwoId,categoryTwo.categoryTwoName FROM categoryTwo
+		order by categoryTwo.categoryTwoId ASC
+		limit
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<insert id="addCateTwo">
+		INSERT INTO categoryTwo (categoryOneId,categoryTwoName) VALUES (#{categoryTwo.categoryOne.categoryOneId},#{categoryTwo.categoryTwoName})
+	</insert>
+	<delete id="delCateTwo">
+		DELETE FROM categoryTwo WHERE categoryTwoId = #{delId}
+	</delete>
+	<update id="uptCateTwo">
+		UPDATE categoryTwo SET categoryTwoName = #{categoryTwo.categoryTwoName} WHERE categoryTwoId =#{categoryTwo.categoryTwoId}
+	</update>
+	<select id="getCateTwoById" resultMap="BaseResultMap">
+		SELECT * FROM categoryTwo WHERE categoryTwoId = #{categoryTwoId}
+	</select>
+	<select id="getRowsCountByPage" resultType="Integer">
+		SELECT COUNT(1) FROM categoryTwo
+	</select>
+	<select id="Search" resultMap="BaseResultMap">
+		SELECT categoryTwo.categoryTwoId,categoryTwo.categoryTwoName FROM categoryTwo 
+		HAVING categoryTwoName like '%${categoryTwoName}%'
+		order by categoryTwo.categoryTwoId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
+		SELECT COUNT(1) FROM categoryTwo WHERE categoryTwo.categoryTwoName like '%${categoryTwoName}%'
+	</select>
 </mapper>

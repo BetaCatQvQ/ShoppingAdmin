@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -15,7 +16,7 @@
     <!-- Custom Styles-->
     <link href="../assets/css/custom-styles.css" rel="stylesheet"/>
     <!-- Google Fonts-->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+<!--     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/> -->
     <!-- TABLE STYLES-->
     <link href="../assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>
 </head>
@@ -39,7 +40,7 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="listCategory"><i class="fa fa-bars"></i> 分类管理</a>
+                    <a href="${rt }/categoryOne/list.action"><i class="fa fa-bars"></i> 分类管理</a>
                 </li>
                 <li>
                     <a href="listUser"><i class="fa fa-user"></i> 用户管理</a>
@@ -75,22 +76,42 @@
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="dataTables_length" id="dataTables-example_length">
+												<label> <select style="display: block;"
+													name="dataTables-example_length"
+													aria-controls="dataTables-example"
+													class="form-control input-sm"><option value="10">10</option>
+														<option value="25">25</option>
+														<option value="50">50</option>
+														<option value="100">100</option></select><small>records per
+														page</small>
+												</label>
+											</div>
+										</div>
+										<div class="col-sm-4"></div>
+										<div class="col-lg-4">
+											<div class="input-group">
+												<input type="text" class="form-control searchList"> <span
+													class="input-group-btn">
+													<button class="btn btn-default serach" type="button" onclick="Search()">Search!
+													</button>
+												</span>
+											</div>
+											<!-- /input-group -->
+										</div>
+									</div>
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                     <tr>
                                         <th>订单id</th>
                                         <th>订单号</th>
-                                        <th>收货地址</th>
-                                        <th>邮编</th>
 
-                                        <th>收货人姓名</th>
-                                        <th>手机号码</th>
+                                        <th>用户姓名</th>
                                         <th>用户备注</th>
 
                                         <th>订单创建时间</th>
-                                        <th>订单支付时间</th>
-                                        <th>订单发货时间</th>
-                                        <th>确认收货时间</th>
                                         <th>订单状态</th>
                                         <th>操作</th>
 
@@ -99,24 +120,20 @@
                                     <tbody>
                                     <c:forEach items="${orders}" var="o">
                                         <tr>
-                                            <td>${o.id}</td>
-                                            <td>${o.order_code}</td>
-                                            <td>${o.address}</td>
-                                            <td>${o.post}</td>
+                                            <td>${o.orderId}</td>
+                                            <td>${o.orderItemId}</td>
 
-                                            <td>${o.receiver}</td>
-                                            <td>${o.mobile}</td>
-                                            <td>${o.user_message}</td>
+                                            <td>${o.userName}</td>
+                                            <td>${o.remark}</td>
 
-                                            <td>${o.create_date}</td>
-                                            <td>${o.pay_date}</td>
-                                            <td>${o.delivery_date}</td>
-                                            <td>${o.pay_date}</td>
+                                            <td>
+                                            	<fmt:formatDate value="${o.orderCreateDate}" pattern="yyyy-MM-dd HH:MM:ss"/>
+                                            </td>
                                             <td>${o.status}</td>
                                             <td>
                                                 <%--<form action="updateOrder" role="form">--%>
                                                     <%-- 表单隐藏信息 --%>
-                                                    <input type="hidden" name="id" value="${o.id}">
+                                                  <%--   <input type="hidden" name="id" value="${o.id}">
                                                     <input type="hidden" name="order_code" value="${o.order_code}">
                                                     <input type="hidden" name="address" value="${o.address}">
                                                     <input type="hidden" name="post" value="${o.post}">
@@ -128,11 +145,12 @@
                                                     <input type="hidden" name="create_date" value="${o.create_date}">
                                                     <input type="hidden" name="pay_date" value="${o.pay_date}">
                                                     <input type="hidden" name="delivery_date" value="${o.delivery_date}">
-                                                    <input type="hidden" name="pay_date" value="${o.pay_date}">
+                                                    <input type="hidden" name="pay_date" value="${o.pay_date}"> --%>
 
                                                     <%-- 更改表单状态 --%>
-                                                        <c:if test="${o.status=='waitDelivery'}">
-                                                            <a href="orderDelivery?order_id=${o.id}">
+                                                        <c:if test="${o.status==0
+                                                        }">
+                                                            <a href="orderDelivery?order_id=${o.orderId}">
                                                                 <button class="btn btn-primary btn-xs">发货</button>
                                                             </a>
                                                         </c:if>
@@ -163,21 +181,22 @@
 <!-- /. WRAPPER  -->
 <!-- JS Scripts-->
 <!-- jQuery Js -->
-<script src="../assets/js/jquery-1.10.2.js"></script>
-<!-- Bootstrap Js -->
+<!-- <script src="../assets/js/jquery-1.10.2.js"></script>
+Bootstrap Js
 <script src="../assets/js/bootstrap.min.js"></script>
-<!-- Metis Menu Js -->
+Metis Menu Js
 <script src="../assets/js/jquery.metisMenu.js"></script>
-<!-- DATA TABLE SCRIPTS -->
+DATA TABLE SCRIPTS
 <script src="../assets/js/dataTables/jquery.dataTables.js"></script>
-<script src="../assets/js/dataTables/dataTables.bootstrap.js"></script>
+<script src="../assets/js/dataTables/dataTables.bootstrap.js"></script> -->
 <script>
-    $(document).ready(function () {
-        $('#dataTables-example').dataTable();
-    });
+    function Search(){
+    	var params = $("searchList").val();
+    	var url = "order/";
+    }
 </script>
 <!-- Custom Js -->
-<script src="../assets/js/custom-scripts.js"></script>
+<!-- <script src="../assets/js/custom-scripts.js"></script> -->
 
 
 </body>

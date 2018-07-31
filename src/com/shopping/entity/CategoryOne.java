@@ -27,4 +27,9 @@ public class CategoryOne {
 		this.categoryOneName = categoryOneName;
 	}
 
+	@Override
+	public String toString() {
+		return "CategoryOne [categoryOneId=" + categoryOneId + ", categoryOneName=" + categoryOneName + "]";
+	}
+	
 }

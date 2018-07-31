@@ -8,11 +8,36 @@
 		<id column="categoryOneId" property="categoryOneId" />
 		<result column="categoryOneName" property="categoryOneName" />
 	</resultMap>
-	
-	<resultMap type="CategoryOne" id="FullResultMap" extends="BaseResultMap">
-	</resultMap>
-
-	<resultMap type="CategoryOne" id="SuperResultMap" extends="BaseResultMap">
-	</resultMap>
-	
+	<!-- sql -->
+	<select id="getCateOne" resultMap="BaseResultMap">
+		SELECT categoryOne.categoryoneId,categoryOne.categoryOneName FROM categoryOne
+		order by categoryOne.categoryOneId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<insert id="addCateOne">
+		INSERT INTO categoryOne (categoryOneName) VALUES (#{categoryOne.categoryOneName})
+	</insert>
+	<delete id="delCateOne">
+		DELETE FROM categoryOne WHERE categoryOneId = #{delId}
+	</delete>
+	<update id="uptCateOne">
+		UPDATE categoryOne SET categoryOneName = #{categoryOne.categoryOneName} WHERE categoryOneId =#{categoryOne.categoryOneId}
+	</update>
+	<select id="getCateOneById" resultMap="BaseResultMap">
+		SELECT * FROM categoryOne WHERE categoryOneId = #{categoryOneId}
+	</select>
+	<select id="getRowsCountByPage" resultType="Integer">
+		SELECT COUNT(1) FROM categoryOne
+	</select>
+	<select id="Search" resultMap="BaseResultMap">
+		SELECT categoryOne.categoryOneId,categoryOne.categoryOneName FROM categoryOne 
+		HAVING categoryOneName like '%${categoryOneName}%'
+		order by categoryOne.categoryOneId ASC
+		limit 
+		#{page.firstIndex},#{page.pageSize}
+	</select>
+	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
+		SELECT COUNT(1) FROM categoryOne WHERE categoryOne.categoryOneName like '%${categoryOneName}%'
+	</select>
 </mapper>
