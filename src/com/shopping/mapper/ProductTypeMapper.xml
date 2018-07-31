@@ -21,4 +21,52 @@
 	<resultMap type="ProductType" id="SuperResultMap" extends="BaseResultMap">
 		<association property="product" resultMap="com.shopping.dao.ProductDao.SuperResultMap" />
 	</resultMap>
+	
+	<select id = "getProductCountByProductId" resultType = "Integer">
+		select count(1) from productType where productId = #{id}
+	</select>
+	
+	<!-- <sql id="selectCondition">
+		<where>
+			<if test = "productTypeName != null and productTypeName != ''">
+				and productTypeName like concat ('%',#{stuName},'%')
+			</if>
+			<if test = "fSalePrice != null and fsalePrice >= 0 and lSalePrice != null lSalePrice >= fsalePrice">
+				and (salePrice between #{fSalePrice} and #{lSalePrice}) or (price between #{fSalePrice}
+				and #{lSalePrice})
+			</if>
+			<if test = "fRestQuantity != null and fRestQuantity >= 0 and lRestQuantity != null and lRestQuantity >= fRestQuantity">
+				and restQuantity between #{fRestQuantity} and #{lRestQuantity}
+			</if>
+			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
+				and productTypeCreateDate between #{firstDate} and #{lastDate}
+			</if>
+			<if test = "productId != null and productId >= 0">
+				and productId = #{productId}
+			</if>
+		</where>
+	</sql> -->
+	
+	<select id = "getProductTypesByProductId" resultMap = "BaseResultMap">
+		select * from productType 
+		<!-- <include refid="searchCondition" /> -->
+		order by productId asc
+		
+		limit #{page.firstIndex},#{page.pageSize}
+	</select>
+	
+	<insert id = "addProductType">
+		insert into productType values (#{productTypeId},#{product.productId},#{productTypeName},
+		#{price},#{salePrice},#{productTypeImagePath},now())
+	</insert>
+	
+	<update id = "updateProductType">
+		update productType set productTypeName = #{productTypeName},
+		price = #{price},salePrice = #{salePrice},productTypeImagePath = #{productTypeImagePath}
+		where productTypeId = #{productTypeId}
+	</update>
+	
+	<delete id = "deleteProductType">
+		delete from productType where productTypeId = #{productTypeId}
+	</delete>
 </mapper>

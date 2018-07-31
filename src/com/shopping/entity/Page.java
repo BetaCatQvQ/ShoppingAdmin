@@ -39,10 +39,12 @@ public class Page<T> {
 	public void setRowCount(Integer rowCount) {
 		this.rowCount = rowCount;
 	}
-	public List<T> getData() {
+	@SuppressWarnings("rawtypes")
+	public List getData() {
 		return data;
 	}
-	public void setData(List<T> data) {
+	@SuppressWarnings("unchecked")
+	public void setData(@SuppressWarnings("rawtypes") List data) {
 		this.data = data;
 	}
 	public Page() {
@@ -51,6 +53,7 @@ public class Page<T> {
 	
 	//获取页面第一条记录的下标,没有私有属性,但是只要有get方法就可以获得
 	public Integer getFirstIndex(){
+		//System.out.println("Class=Page: firstIndex = "+(pageNo-1) * pageSize);
 		return (pageNo-1) * pageSize;
 	}
 	

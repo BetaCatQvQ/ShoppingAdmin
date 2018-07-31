@@ -85,18 +85,10 @@
                                 <form action="updateProduct" role="form">
                                     <div class="form-group">
                                         <input type="hidden" name="id" value="${product.id}">
-                                        <label>产品名称：</label>
-                                        <input type="text" name="name" class="form-control" value="${product.name}">
                                         <label>产品标题：</label>
+                                        <input type="text" name="name" class="form-control" value="${product.name}">
+                                        <label>产品名称：</label>
                                         <input type="text" name="sub_title"class="form-control" value="${product.sub_title}">
-                                        <label>产品价格：</label>
-                                        <input type="text" name="price"class="form-control" value="${product.price}">
-                                        <label>产品销量：</label>
-                                        <input type="text" name="sale"class="form-control" value="${product.sale}">
-                                        <label>产品库存：</label>
-                                        <input type="text" name="stock"class="form-control" value="${product.stock}"> <br>
-                                        <input type="hidden" name="category_id" value="${category.id}">
-                                        <input type="submit" class="btn btn-default pull-right" value="确认修改">
                                     </div>
                                 </form>
                             </div>

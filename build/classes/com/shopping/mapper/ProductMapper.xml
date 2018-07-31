@@ -13,13 +13,21 @@
 	<resultMap type="Product" id="FullResultMap" extends="BaseResultMap">
 		<association property="categoryThree" resultMap="com.shopping.dao.CategoryThreeDao.BaseResultMap" />
 	</resultMap>
+	
+	<resultMap type = "Product" id = "ShowResultMap" extends = "BaseResultMap">
+		<collection property = "productType" 
+		ofType = "com.shopping.entity.ProductType"  /><!-- select = "getProductTypeById" -->
+		<collection property = "productImage" 
+		ofType = "com.shopping.entity.ProductImage"  /><!-- select = "getProductImageById" -->
+	</resultMap>
 
 	<resultMap type="Product" id="SuperResultMap" extends="BaseResultMap">
 		<association property="categoryThree" resultMap="com.shopping.dao.CategoryThreeDao.SuperResultMap" />
-	</resultMap>
+	</resultMap>	
 	
-	<!-- <if test="stuName != null and stuName != ''">
-				and stuName like concat('%', #{stuName}, '%')
+	
+	<!-- <if test="stuName != null and stuName != ''">s
+				and stuName like concat(';%', #{stuName}, '%')
 			</if> -->
 			<!-- <if test="gradeId != null and gradeId != 0">
 				and g.gradeId=#{gradeId}
@@ -27,49 +35,54 @@
 			
 			<!-- @Param("page") Page<Product> page,
 			@Param("productId") Integer productId,
-			@Param("productName") String productName,
+			@Param("productName") String productName,+
 			@Param("firstDate") Date firstDate,
 			@Param("lastDate") Date lastDate); -->
 			
 	<sql id="selectCondition">
 		<where>
-			<if test = "productId != null and productId != 0">
-				and productId = #{productId}
-			</if>
 			<if test = "productName != null and productName != ''">
-				and productName like concat ('%',#{stuName},'%')
+				and p.productName like concat ('%',#{productName},'%')
 			</if>
-			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
-				and productCreateDate between #{firstDate} and #{lastDate}
+			<if test = "firstDate != null and lastDate != null ">
+				and p.productCreateDate between #{firstDate} and #{lastDate}
 			</if>
 			<if test = "categoryThreeId != null and categoryThreeId != 0">
-				and categoryThreeId = #{categoryThreeId}
+				and p.categoryThreeId = #{categoryThreeId}
 			</if>
 		</where>
 	</sql>
 	
 	<insert id = "add">
-		insert into product values(#{productId},#{productThreeId},#{productName},#{productCreateDate})
+		insert into product values(#{productId},#{categoryThree.categoryThreeId},#{productName},#{productCreateDate})
 	</insert>
 	
 	<update id = "update">
-		update product set productName = #{productName},productCreateDate = now() where productId = #{productId}
+		update product set productName = #{productName} where productId = #{productId}
 	</update>
 	
 	<delete id= "delete">
 		delete from product set productId = #{productId}
 	</delete>
 
-	<select id="getProducts">
-		select * from product 
+	<select id="getProducts" resultType = "Map">
+		select p.*,pi.productImagePath,sum(pt.restQuantity) restQuantity from product p
+		 inner join productImage pi on pi.productId = p.productId
+		 inner join productType pt on pt.productId = p.productId
 		<include refid = "selectCondition" />
+		group by p.productId
 		order by productId asc
 		
 		limit #{page.firstIndex},#{page.pageSize}
 	</select>
 	
-	<select id="getCount">
-		select count(1) from product
+	<select id = "getProductByProductId" resultType = "BaseResultMap">
+		select * from product where productId = #{productId} limit 1;
+	</select>
+	
+	<select id="getCount" resultType="Integer">
+		select count(1) from product p
 		<include refid = "selectCondition" />
 	</select>
+
 </mapper>

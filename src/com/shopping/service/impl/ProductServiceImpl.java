@@ -1,7 +1,8 @@
 package com.shopping.service.impl;
 
-import java.util.Date;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,10 +24,10 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao pDao;
 
 	@Override
-	public List<Product> getProducts(@SuppressWarnings("rawtypes") Page page, Integer productId,
-			String productName, Date firstDate, Date lastDate,
+	public List<Map> getProducts(@SuppressWarnings("rawtypes") Page page, /*BigInteger productId,*/
+			String productName, String firstDate, String lastDate,
 			Integer CategoryId) {
-		return pDao.getProducts(page, productId, productName, firstDate, lastDate, CategoryId);
+		return pDao.getProducts(page, /*productId,*/ productName, firstDate, lastDate, CategoryId);
 	}
 
 	@Override
@@ -40,13 +41,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Integer delete(Integer productId) {
+	public Integer delete(BigInteger productId) {
 		return pDao.delete(productId);
 	}
 
 	@Override
-	public Integer getCount(@SuppressWarnings("rawtypes") Page page, Integer productId, String productName,
-			Date firstDate, Date lastDate, Integer CategoryId) {
-		return pDao.getCount(page, productId, productName, firstDate, lastDate, CategoryId);
+	public Integer getCount(@SuppressWarnings("rawtypes") Page page, /*BigInteger productId,*/ String productName,
+			String firstDate, String lastDate, Integer CategoryId) {
+		return pDao.getCount(page, /*productId,*/ productName, firstDate, lastDate, CategoryId);
+	}
+
+	@Override
+	public Product getProductByProductId(BigInteger productId) {
+		return pDao.getProductByProductId(productId);
 	}
 }

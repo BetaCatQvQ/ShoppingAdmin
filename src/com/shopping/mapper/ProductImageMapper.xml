@@ -17,4 +17,36 @@
 		<association property="product" resultMap="com.shopping.dao.ProductDao.SuperResultMap" />
 	</resultMap>
 
+	<!-- <select id = "getImagesByProductId" resultMap="BaseResultMap">
+		select * from productImage where productId = #{productId}
+	</select> -->
+	
+	<sql id="selectCondition">
+		<where>
+			<if test = "productId != null and productId != 0">
+				and productId = #{productId}
+			</if>
+			<if test = "productName != null and productName != ''">
+				and productName like concat ('%',#{stuName},'%')
+			</if>
+			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
+				and productCreateDate between #{firstDate} and #{lastDate}
+			</if>
+			<if test = "categoryThreeId != null and categoryThreeId != 0">
+				and categoryThreeId = #{categoryThreeId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getProducts" resultMap = "FullResultMap">
+		select * from productImage as pi
+		inner join product p on p.productId = pi.productId
+		<include refid = "selectCondition" />
+		order by productId asc
+		
+		limit #{page.firstIndex},#{page.pageSize}
+	</select>
+	
+	
+	
 </mapper>
