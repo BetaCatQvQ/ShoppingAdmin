@@ -1,7 +1,5 @@
 package com.shopping.controller;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -23,6 +21,7 @@ public class CategoryOneController {
 
 	@RequestMapping("/list")
 	public String getList(Model model, Page<CategoryOne> page) {
+		page.setPageSize(5);
 		co.getCateOneList(page);
 		model.addAttribute("page", page);
 		return "listCategory";
@@ -40,18 +39,21 @@ public class CategoryOneController {
 		return "redirect:/categoryOne/list.action";
 	}
 
-	@RequestMapping("/search?categoryOneName")
-	public List<CategoryOne> search(String categoryOneName, Page<CategoryOne> page) {
-		co.search(categoryOneName, page);
-		return page.getData();
-	}
-
 	// =======================Ajax==========================
 	@RequestMapping("/listOne")
 	@ResponseBody
-	public Object getCategoryOne() {
+	public Object getCategoryOne(Integer pageSize) {
 		Page<CategoryOne> page = new Page<CategoryOne>();
+		page.setPageSize(pageSize);
 		co.getCateOneList(page);
+		return page;
+	}
+	@RequestMapping("/getBysearch")
+	@ResponseBody
+	public Object getBysearch(String searchParams,Integer selectVal,Integer pageNo,Page<CategoryOne> page) {
+		page.setPageSize(selectVal);
+		page.setPageNo(pageNo);
+		co.search(searchParams, page);
 		return page;
 	}
 }

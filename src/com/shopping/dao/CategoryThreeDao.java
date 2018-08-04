@@ -9,12 +9,12 @@ import com.shopping.entity.Page;
 
 public interface CategoryThreeDao {
 	public List<CategoryThree> getCateThree(@Param("page") Page page);
-	
-	public List<CategoryThree> Search(@Param("categoryThreeName")String categoryThreeName,@Param("page") Page page);
-	
+
+	public List<CategoryThree> Search(@Param("categoryThreeName") String categoryThreeName, @Param("page") Page page);
+
 	public Integer getRowsCountByPage();
-	
-	public Integer getRowsCountToPageByCategoryName(@Param("categoryThreeName")String categoryThreeName);
+
+	public Integer getRowsCountToPageByCategoryName(@Param("categoryThreeName") String categoryThreeName);
 
 	public Integer addCateThree(@Param("categoryThree") CategoryThree categoryThree);
 

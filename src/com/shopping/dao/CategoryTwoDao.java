@@ -23,4 +23,5 @@ public interface CategoryTwoDao {
 	public Integer delCateTwo(@Param("delId") Integer delId);
 
 	public Integer uptCateTwo(@Param("categoryTwo") CategoryTwo categoryTwo);
+	
 }

@@ -1,0 +1,9 @@
+.uiPage {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	alignn-items: center;
+}
+#selectPage{
+	display: block;
+}

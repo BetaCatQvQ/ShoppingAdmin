@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.shopping.entity.CategoryOne;
 import com.shopping.entity.CategoryTwo;
 import com.shopping.entity.Page;
 import com.shopping.service.CategoryTwoService;
@@ -21,6 +22,7 @@ public class CategoryTwoController {
 	@RequestMapping("/list")
 	@ResponseBody
 	public List<CategoryTwo> getList(Page<CategoryTwo> page){
+		page.setPageSize(5);
 		ct.getCateTwoList(page);
 		System.out.println(page.getData().size());
 		return page.getData();
@@ -28,9 +30,18 @@ public class CategoryTwoController {
 	//---------------ajax-------------------
 	@RequestMapping("/listTwo")
 	@ResponseBody
-	public Object getCategoryTwo() {
+	public Object getCategoryTwo(Integer pageSize) {
 		Page<CategoryTwo> page = new Page<CategoryTwo>();
-		ct.getCateTwoList(page);
+		page.setPageSize(pageSize);
+		return page;
+	}
+	
+	@RequestMapping("/getBysearch")
+	@ResponseBody
+	public Object getBysearch(String searchParams,Integer selectVal,Page<CategoryOne> page) {
+		page.setPageSize(selectVal);
+		System.out.println(searchParams);
+		ct.search(searchParams, page);
 		return page;
 	}
 }

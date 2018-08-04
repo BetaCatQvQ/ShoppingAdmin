@@ -48,7 +48,7 @@ public class CategoryTwoServiceImpl implements CategoryTwoService{
 	public void search(String categoryTwoName,Page page) {
 		Integer rowCount = ctDao.getRowsCountToPageByCategoryName(categoryTwoName);
 		page.setRowCount(rowCount);
-		List<CategoryTwo> categoryTwos=  ctDao.getCateTwo(page);
+		List<CategoryTwo> categoryTwos=  ctDao.Search(categoryTwoName, page);
 		page.setData(categoryTwos);
 
 	}

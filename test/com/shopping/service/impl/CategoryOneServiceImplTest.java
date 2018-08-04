@@ -1,7 +1,5 @@
 package com.shopping.service.impl;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import com.shopping.entity.CategoryOne;
@@ -15,8 +13,9 @@ public class CategoryOneServiceImplTest {
 	@Test
 	public void testGetCateOneList() throws Exception {
 		Page<CategoryOne> page = new Page<CategoryOne>();
+		page.setPageSize(5);
 		userService.getCateOneList(page);
-		
+		System.out.println(page.getData());
 	}
 	@Test
 	public void testAddCateOne() throws Exception {
@@ -40,8 +39,11 @@ public class CategoryOneServiceImplTest {
 	}
 	@Test
 	public void testSearch() throws Exception {
-		String categoryOneName = "¼Ò";
+		String categoryOneName = "µç";
 		Page<CategoryOne> cPage = new Page<CategoryOne>();
+		cPage.setPageSize(5);
 		userService.search(categoryOneName,cPage);
+		System.out.println(cPage.getData());
+		System.out.println(cPage.getFirstIndex());
 	}
 }

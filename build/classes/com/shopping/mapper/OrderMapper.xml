@@ -17,10 +17,42 @@
 		<association property="user" resultMap="com.shopping.dao.UserDao.SuperResultMap" />
 	</resultMap>
 	<!-- SQL -->
+	<sql id="whereConditionOrderId">
+		<where>
+			<if test="orderId != null and orderId !=''">
+				and orderId = #{orderId}
+			</if>
+			<if test="orderItemId != null and orderItemId !=''">
+				and orderItemId = #{orderItemId}
+			</if>
+			<if test="startPayTime != null and startPayTime != ''">
+				<![CDATA[ and orderPayDate >= #{startPayTime} ]]>
+			</if>
+			<if test="endPayTime != null and endPayTime != ''">
+				<![CDATA[  and orderPayDate <= #{endPayTime}  ]]>
+			</if>
+			<if test="startConfirmTime != null and startConfirmTime != ''">
+				<![CDATA[ and orderConfirmDate >= #{startConfirmTime} ]]>
+			</if>
+			<if test="endConfirmTime != null and endConfirmTime != ''">
+				<![CDATA[  and orderConfirmDate <= #{endConfirmTime}  ]]>
+			</if>
+		</where>
+	</sql>
 	<select id="listOrder" resultType="Map">
-		SELECT `or`.orderId,oi.orderItemId,u.userName,oi.remark,`or`.orderCreateDate,oi.status 
-		FROM `order` `or`,orderItem oi,`user` u 
-		WHERE `or`.userId = u.userId 
-		AND oi.orderId  = `or`.orderId
+		SELECT `or`.orderId,`oi`.orderItemId,adr.`addressName`,adr.`consignee`,adr.`phone`,`oi`.`remark`,
+		`or`.`orderCreateDate`,`or`.`orderPayDate`,`or`.`orderDeliveryDate`,`or`.`orderConfirmDate`,`oi`.status,us.userName
+		FROM `order` `or`,`orderitem` `oi`,`address` adr,`user` us
+		WHERE `oi`.orderId = `or`.orderId 
+		AND  `or`.addressId = adr.addressId
+		AND adr.userId = us.userId
+		AND adr.userId = `or`.userId
+		<include refid="whereConditionOrderId"></include>
+		ORDER BY `oi`.orderId ASC
+		LIMIT #{page.firstIndex},#{page.pageSize}
+	</select>
+	<select id="getRowsCountByPage" resultType="Integer">
+		select count(1) from `order` 
+		<include refid="whereConditionOrderId"></include>
 	</select>
 </mapper>

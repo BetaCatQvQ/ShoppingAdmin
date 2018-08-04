@@ -45,7 +45,7 @@ public class CategoryThreeServiceImpl implements CategoryThreeService{
 	public void search(String categoryThreeName,Page page) {
 		Integer rowCount = ctDao.getRowsCountToPageByCategoryName(categoryThreeName);
 		page.setRowCount(rowCount);
-		List<CategoryThree> categoryThrees=  ctDao.getCateThree(page);
+		List<CategoryThree> categoryThrees=  ctDao.Search(categoryThreeName, page);
 		page.setData(categoryThrees);
 	}
 }

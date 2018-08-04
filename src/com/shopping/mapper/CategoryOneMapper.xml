@@ -32,9 +32,9 @@
 	</select>
 	<select id="Search" resultMap="BaseResultMap">
 		SELECT categoryOne.categoryOneId,categoryOne.categoryOneName FROM categoryOne 
-		HAVING categoryOneName like '%${categoryOneName}%'
-		order by categoryOne.categoryOneId ASC
-		limit 
+		where categoryOne.categoryOneName like '%${categoryOneName}%'
+		ORDER BY categoryOne.categoryOneId ASC
+		LIMIT 
 		#{page.firstIndex},#{page.pageSize}
 	</select>
 	<select id="getRowsCountToPageByCategoryName" resultType="Integer">

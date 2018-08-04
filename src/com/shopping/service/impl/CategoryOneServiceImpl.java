@@ -48,7 +48,7 @@ public class CategoryOneServiceImpl implements CategoryOneService{
 	public void search(String categoryOneName,Page page) {
 		Integer rowCount = coDao.getRowsCountToPageByCategoryName(categoryOneName);
 		page.setRowCount(rowCount);
-		List<CategoryOne> categoryOnes=  coDao.getCateOne(page);
+		List<CategoryOne> categoryOnes=  coDao.Search(categoryOneName, page);
 		page.setData(categoryOnes);
 	}
 }
