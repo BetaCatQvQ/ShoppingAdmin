@@ -12,7 +12,7 @@ public class Page<T> {
 	private Integer pageNo = 1;	//表示当前第几页
 	@SuppressWarnings("unused")
 	private Integer pageCount;	//表示总页数
-	private Integer pageSize = 10;	//每页显示的行数
+	private Integer pageSize;	//每页显示的行数
 	private Integer rowCount;	//总记录数
 	private List<T> data;	//装载数据
 	public Integer getPageNo() {
@@ -22,7 +22,12 @@ public class Page<T> {
 		this.pageNo = pageNo;
 	}
 	public Integer getPageCount() {
-		return (rowCount - 1) / pageSize + 1;
+		if (rowCount==1) {
+			pageCount = 1;
+			return pageCount;
+		}else {
+			return (rowCount - 1) / pageSize + 1;
+		}
 	}
 	public void setPageCount(Integer pageCount) {
 		this.pageCount = pageCount;
@@ -39,12 +44,10 @@ public class Page<T> {
 	public void setRowCount(Integer rowCount) {
 		this.rowCount = rowCount;
 	}
-	@SuppressWarnings("rawtypes")
-	public List getData() {
+	public List<T> getData() {
 		return data;
 	}
-	@SuppressWarnings("unchecked")
-	public void setData(@SuppressWarnings("rawtypes") List data) {
+	public void setData(List<T> data) {
 		this.data = data;
 	}
 	public Page() {
@@ -53,7 +56,6 @@ public class Page<T> {
 	
 	//获取页面第一条记录的下标,没有私有属性,但是只要有get方法就可以获得
 	public Integer getFirstIndex(){
-		//System.out.println("Class=Page: firstIndex = "+(pageNo-1) * pageSize);
 		return (pageNo-1) * pageSize;
 	}
 	
