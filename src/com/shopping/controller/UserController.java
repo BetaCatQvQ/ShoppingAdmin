@@ -1,22 +1,11 @@
 package com.shopping.controller;
 
-import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.annotation.SessionScope;
 
-import com.shopping.entity.User;
 import com.shopping.service.UserService;
-import com.shopping.util.HttpVal;
 
 @Controller
 @RequestMapping("/user")
@@ -24,7 +13,7 @@ public class UserController {
 	@Resource
 	private UserService uService;
 
-	@RequestMapping("/login")
+	/*@RequestMapping("/login")
 	public String commonLogin(HttpSession session, User user) {
 		User newUser = uService.commonUserLogin(user.getUserName(), user.getUserPwd());
 		System.out.println(newUser);
@@ -50,7 +39,7 @@ public class UserController {
 			session.setAttribute("error", "’À∫≈√‹¬Î¥ÌŒÛ");
 			return "login";
 		}
-	}
+	}*/
 
 	
 }

@@ -25,11 +25,11 @@ public class Product {
 	/**
 	 * 多对一,产品类型
 	 */
-	private Set<ProductType> productTypes = new HashSet<ProductType>();
+	/*private Set<ProductType> productTypes = new HashSet<ProductType>();*/
 	/**
 	 * 一对一,产品图片
 	 */
-	private ProductImage productImage;
+	/*private ProductImage productImage;*/
 
 	// getter --- setter
 	public BigInteger getProductId() {
@@ -48,7 +48,7 @@ public class Product {
 		this.categoryThree = categoryThree;
 	}
 	
-	public Set<ProductType> getProductTypes() {
+	/*public Set<ProductType> getProductTypes() {
 		return productTypes;
 	}
 
@@ -62,7 +62,7 @@ public class Product {
 
 	public void setProductImage(ProductImage productImage) {
 		this.productImage = productImage;
-	}
+	}*/
 
 	public String getProductName() {
 		return productName;
@@ -80,4 +80,10 @@ public class Product {
 		this.productCreateDate = productCreateDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", categoryThree="
+				+ categoryThree + ", productName=" + productName
+				+ ", productCreateDate=" + productCreateDate + "]";
+	}
 }

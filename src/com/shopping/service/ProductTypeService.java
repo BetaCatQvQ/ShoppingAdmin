@@ -25,4 +25,6 @@ public interface ProductTypeService {
 	public Integer addProductType(ProductType productType);
 	public Integer updateProductType(ProductType productType);
 	public Integer deleteProductType(Integer productTypeId);
+	
+	public Integer deleteProductTypeByProductId(BigInteger productId);
 }

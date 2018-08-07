@@ -48,4 +48,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Integer deleteProductTypeByProductId(BigInteger productId) {
+		return ptDao.deleteProductTypeByProductId(productId);
+	}
 }

@@ -24,5 +24,7 @@ public interface ProductTypeDao {
 	
 	public Integer addProductType(ProductType productType);
 	public Integer updateProductType(ProductType productType);
-	public Integer deleteProductType(Integer productTypeId);
+	public Integer deleteProductType(BigInteger productTypeId);
+	
+	public Integer deleteProductTypeByProductId(BigInteger productId);
 }

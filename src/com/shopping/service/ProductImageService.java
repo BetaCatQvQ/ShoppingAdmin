@@ -10,11 +10,10 @@ import com.shopping.entity.Page;
 import com.shopping.entity.ProductImage;
 
 public interface ProductImageService {
-	public List<ProductImage> getProductsAndImages(@SuppressWarnings("rawtypes") @Param("page") Page page,
-			@Param("productId") BigInteger productId,
-			@Param("productName") String productName,
-			@Param("firstDate") Date firstDate,
-			@Param("lastDate") Date lastDate,
-			@Param("categoryThreeId") Integer CategoryId);
-	/*public List<ProductImage> getImagesByProductId(Integer productId);*/
+	
+	public Integer addProductImageProductImage (ProductImage productImage,BigInteger ProductId);
+	
+	public List<ProductImage> getProductImageByProductId(BigInteger ProductId);
+	
+	public Integer deleteProductImageByProductId(BigInteger productId);
 }

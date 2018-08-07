@@ -1,7 +1,9 @@
 package com.shopping.controller;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -14,8 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.shopping.entity.CategoryThree;
 import com.shopping.entity.Page;
 import com.shopping.entity.Product;
+import com.shopping.entity.ProductType;
+import com.shopping.service.ProductDetailImageService;
 import com.shopping.service.ProductImageService;
+import com.shopping.service.ProductPropertyValueService;
 import com.shopping.service.ProductService;
+import com.shopping.service.ProductTypeService;
 import com.shopping.util.SnowFlake;
 
 @Controller
@@ -28,6 +34,15 @@ public class ProductController {
 
 	@Resource
 	private ProductImageService productImageService;
+	
+	@Resource
+	private ProductTypeService productTypeService;
+	
+	@Resource
+	private ProductDetailImageService productDetailImageService;
+	
+	@Resource
+	private ProductPropertyValueService productPropertyValueService;
 
 	@RequestMapping("/showProducts")
 	public String showProducts(Model model) {
@@ -51,11 +66,6 @@ public class ProductController {
 	public Page<Product> getProductsByPage(String searchName, String firstDate, String lastDate,
 			Integer categoryId, Integer currentPage,Integer pageSize) {
 		
-		/*Date startTime = CommonTools.getDateFromString(firstDate,
-				"YYYY-MM-dd HH:mm");
-		Date finalTime = CommonTools.getDateFromString(lastDate,
-				"YYYY-MM-dd HH:mm");*/
-		
 		System.out.println("searchProducts");
 		
 		Page page = new Page();
@@ -71,8 +81,7 @@ public class ProductController {
 
 	@RequestMapping("/addProduct")
 	@ResponseBody
-	public Integer addProduct(Integer currentPage,Integer pageSize,
-			String productName,Integer categoryThreeId) {
+	public Integer addProduct(String productName,Integer categoryThreeId) {
 		Product product = new Product();
 		CategoryThree categoryThree = new CategoryThree();
 		categoryThree.setCategoryThreeId(categoryThreeId);
@@ -81,21 +90,34 @@ public class ProductController {
 		product.setCategoryThree(categoryThree);
 		product.setProductCreateDate(new Date());
 		
+		ProductType productType = new ProductType();
+		productType.setProduct(product);
+		productType.setProductTypeName(productName);
+		productType.setProductTypeImagePath("");
+		productType.setPrice((float)-1);
+		productType.setSalePrice((float)-1);
+		productType.setRestQuantity(0);
+		
 		Integer insertResult = productService.add(product);
+		Integer insertResultType = productTypeService.addProductType(productType);
+		if (insertResult != 1 || insertResultType != 1) {
+			return null;
+		}
 		return insertResult;
 	}
 	
 	@RequestMapping("/editProduct")
 	@ResponseBody
-	public Integer editProduct(Integer currentPage,Integer pageSize,Integer productId,
-			String productName,Integer categoryThreeId) {
+	public Integer editProduct(/*Integer currentPage,Integer pageSize,*/ BigInteger productId,
+			String productName/*,Integer categoryThreeId*/) {
+		
+		System.out.println(productId);
+		System.out.println(productName);
+		
 		Product product = new Product();
-		CategoryThree categoryThree = new CategoryThree();
-		categoryThree.setCategoryThreeId(categoryThreeId);
-		product.setProductId(BigInteger.valueOf(productId));
+		product.setProductId(productId);
 		product.setProductName(productName);
-		product.setCategoryThree(categoryThree);
-		//product.setProductCreateDate(new Date());
+		product.setProductCreateDate(new Date());
 		
 		Integer insertResult = productService.update(product);
 		return insertResult;
@@ -103,18 +125,35 @@ public class ProductController {
 	
 	@RequestMapping("/deleteProduct")
 	@ResponseBody
-	public Integer deleteProduct(Integer currentPage,Integer pageSize,Integer productId,
+	public Integer deleteProduct(BigInteger productId,
 			String productName,Integer categoryThreeId) {
-		Product product = new Product();
 		
-		Integer insertResult = productService.delete(BigInteger.valueOf(productId));
-		return insertResult;
+		Integer productTypeResult = productTypeService.deleteProductTypeByProductId(productId);
+		Integer productImageResult = productImageService.deleteProductImageByProductId(productId);
+		Integer productDetailImageResult = productDetailImageService.deleteProductDetailImageByProductId(productId);
+		Integer productPropertyValueResult = productPropertyValueService.deleteProductPropertyValueByProductId(productId);
+		Integer productResult = productService.delete(productId);
+		
+		if (productResult != 1 ||
+			productTypeResult < 0	||
+			productImageResult < 0 	 ||
+			productDetailImageResult < 0 ||
+			productPropertyValueResult < 0) {
+			
+			return null;
+			
+		}
+		
+		return productResult;
 	}
 	
 	@RequestMapping("/getProductByProductId")
 	@ResponseBody
-	public Product getProductByProductId(Integer productId) {
-		Product product = productService.getProductByProductId(BigInteger.valueOf(productId));
+	public Product getProductByProductId(BigInteger productId) {
+		Product product = productService.getProductByProductId(productId);
+		System.out.println("getProductByProductId");
+		System.out.println(productId);
+		System.out.println(product);
 		return product;
 	}
 }

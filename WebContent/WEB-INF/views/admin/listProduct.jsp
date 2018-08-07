@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
 <meta charset="utf-8" />
@@ -132,40 +133,43 @@
 							$('#totalPage').text(page.pageNo);
 							$('#thisPage').text(page.pageCount);
 							$('#listBody').html("");//清空table数据
+							console.log(page);
 							jQuery
 									.each(
 											page.data,
 											function(i, p) {
+												
+												var imageHtml = "无";
+												
+												if (p.productImagePath != '' && p.productImagePath != null) {
+													imageHtml = "<img src = '${root}/"
+														+ p.productImagePath
+														+ "'  />"
+												}
+												
 												var showList = "<tr><td>"
 														+ p.productId
 														+ "</td>"
-														+ "<td><img id = 'productImageShow' src = '${root}/"
-														+ p.productImagePath
-														+ "'  />"
+														+ "<td>"
+														+ imageHtml
 														+ "<td>"
 														+ p.productName
 														+ "</td>"
 														+ "<td>"
 														+ p.restQuantity
 														+ "</td>"
-														+ "<td>"
-														+ p.productCreateDate
+														+ "<td>" + p.productCreateDate
 														+ "</td>"
-														+ "<td><a href='editProduct?productId="
+														+ "<td><a><span class='glyphicon glyphicon-edit' onclick = showUpdateWindow('edit','"
 														+ p.productId
-														+ "'><span class='glyphicon glyphicon-edit'></span></a></td>"
-														+ "<td><a href='editProductImage?productId="
+														+ "')></span></a></td>"
+														+ "<td><a><span class='glyphicon glyphicon-pcture'  onclick = showUpdateWindow('imageEdit','"
 														+ p.productId
-														+ "'><span class='glyphicon glyphicon-pcture'></span></a></td>"
-														+ "<td><a href='editProductProperties?productId="
-														+ p.productId
-														+ "&category_id="
-														+ p.categoryId
-														+ "'><span class='glyphicon glyphicon-list'></span></a></td>"
-														+ "<td><a href='deleteProduct?productId="
-														+ p.productId
-														+ "'><span class='glyphicon glyphicon-trash'></span></a></td>";
+														+ "')></span></a></td>"
+														+ "<td><a><span class='glyphicon glyphicon-list'></span></a></td>"
+														+ "<td><a><span class='glyphicon glyphicon-trash' onclick = showUpdateWindow('delete','"+p.productId+"')></span></a></td>";
 														
+														//console.log(showList);
 												/* <th>产品id</th>
 												<th>产品图片</th>
 												<th>产品名称</th>
@@ -186,28 +190,30 @@
 	function updateProductAction(actionType) {
 		var url = "../product/addProduct.action";
 		var selectedProductId = $("#selectedProductId").val();
-		var productName = $("add_productName").val();
+		var productName = $("#add_productName").val();
+		var categoryThreeId = 1;
 		switch (actionType) {
 			case "add":
 				url = "../product/addProduct.action";
-				var productName = $("add_productName").val();
+				var productName = $("#add_productName").val();
 				break;
 			case "edit":
 				url = "../product/editProduct.action";
-				var productName = $("add_productName").val();
+				var productName = $("#edit_productName").val();
 				break;
 			case "delete":
 				url = "../product/deleteProduct.action";
 				break;
 		}
-		
+
 		$.post(url,{
 			"productId" : selectedProductId,
-			"productName" : productName
+			"productName" : productName,
+			"categoryThreeId" : categoryThreeId
 		},function(data){
 			if (data == 1) {
-				alert("操作成功");
 				cancelWindow(actionType);
+				pageAction("");
 			}
 		},"json");
 	}
@@ -221,8 +227,35 @@
 			if (product != null) {
 				$("#edit_productName").val(product.productName);
 			}
+			//alert(product);
 		},"json");
-	} 
+	}
+	
+	function getInformationByProductId(actionType) {
+		var productId = $("#selectedProductId").val();
+		var url = ""
+		
+		switch (actionType) {
+			case "productImage":
+					url = "../productImage/getProductImagesByProductId";
+				break;
+			case "productDetailImage":
+					url = "../productDetailImage/getProductDetailImagesByProductId";
+				break;
+			case "productPropertyValue":
+					url = "../productPropertyValue/getPropertyValuesFromProduct";
+				break;
+			case "productType":
+					url = "../productType/getProductTypesByProductId";
+				break;
+		}
+		
+		$.post(url,{
+			"productId" : productId
+		},function(data) {
+			return data;
+		},"json");
+	}
 	
 	</script>
 	
@@ -237,22 +270,29 @@
 						$("#editWindow").slideDown(300);
 						$("#background").show();
 						$("#selectedProductId").val(productId);
+						//alert(productId);
+						getProductById();
 					break;
 				case "delete":
 						$("#deleteWindow").slideDown(500);
 						$("#background").show();
 						$("#selectedProductId").val(productId);
 					break;
+				case "imageEdit":
+						$("#imageEditWindow").slideDown(500);
+						$("#background").show();
+						$("#selectedProductId").val(productId);
+					break;
 			}
 		}
 		
-		function cancelWindow(windowType) {			
+		function cancelWindow(windowType) {
 			switch (windowType) {
 				case "add":
 						$("#addWindow").slideUp(300);
 	                    $("#background").hide();
 	                    $("#addWindow input").val("");
-					break;
+					break; 
 				case "edit":
 						$("#editWindow").slideUp(300);
 						$("#background").hide();
@@ -262,12 +302,18 @@
 						$("#deleteWindow").slideUp(500);
 						$("#background").hide();
 					break;
+				case "imageEdit":
+						$("#imageEditWindow").slideUp(500);
+						$("#background").hide();
+						$("#selectedProductId").val(productId);
+					break;
 			}
 		}
 	</script>
 </head>
 <body>
 	<div id="wrapper">
+	
 		<!-- <nav class="navbar navbar-default top-navbar" role="navigation">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -311,6 +357,7 @@
 					</div>
 				</div>
 				<br>
+				<div id = "searchBar">
 					名称搜索:<input type = "text" name = "searchMessage" id = "searchMessage"/>
 					开始日期:<input type = "datetime-local" name = "firstDate" id = "firstDate" />
 					结束日期:<input type = "datetime-local" name = "lastDate" id = "lastDate" />
@@ -319,6 +366,10 @@
 					<input type = "hidden" name = "firstDateHidden" id = "firstDateHidden" value = "" />
 					<input type = "hidden" name = "lastDateHidden" id = "lastDateHidden" value = "" />
  					<button id = "searchButton" name = "searchButton" onclick = "pageAction('search')" >搜索</button>
+ 				</div>
+ 				<div id = "addButtonOuterDiv">
+ 					<button id = "addButton" name = "addButton" onclick = "showUpdateWindow('add',0)" >添加一个产品</button>
+ 				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<!-- Advanced Tables -->
@@ -351,15 +402,14 @@
 													<td>${p.restQuantity}</td>
 													<td>${p.productCreateDate}</td>
 
-													<td><a href="<%-- editProduct?id=${p.productId} --%>"><span
-															class="glyphicon glyphicon-edit" onclick = "showUpdateWindow('edit',${p.productId})"></span></a></td>
-													<td><a href="<%-- editProductImage?product_id=${p.productId} --%>"><span
-															class="glyphicon glyphicon-picture" onclick = "showUpdateWindow('imageEdit',${p.productId})"></span></a></td>
-													<td><a
-														href="<%-- listPropertyValue?product_id=${p.productId}&category_id=${category.id} --%>"><span
+													<td><a><span
+															class="glyphicon glyphicon-edit" onclick = "showUpdateWindow('edit','${p.productId}')"></span></a></td>
+													<td><a><span
+															class="glyphicon glyphicon-picture" onclick = "showUpdateWindow('imageEdit','${p.productId}')"></span></a></td>
+													<td><a><span
 															class="glyphicon glyphicon-list"></span></a></td>
-													<td><a href="<%-- deleteProduct?id=${p.productId} --%>"><span
-															class="glyphicon glyphicon-trash"></span></a></td>
+													<td><a><span
+															class="glyphicon glyphicon-trash" onclick = "showUpdateWindow('delete','${p.productId}')"></span></a></td>
 												</tr>
 	
 											</c:forEach>
@@ -463,8 +513,16 @@
     </div>
     
     <!-- 窗口信息 -->
+
+	<div id = "background"></div>
     
     <input type = "hidden" name = "selectedProductId" id = "selectedProductId" value = "" />
+    
+    <!-- 图片管理 -->
+    
+    <div class = "jumpWindow" id = "imageEdit">
+    	<label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('imageEdit')">x</label>
+    </div>
 
 </body>
 	<style type = "text/css">

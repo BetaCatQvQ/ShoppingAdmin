@@ -19,16 +19,19 @@ public class ProductImageServiceImpl implements ProductImageService {
 	private ProductImageDao piDao;
 
 	@Override
-	public List<ProductImage> getProductsAndImages(Page page,
-			BigInteger productId, String productName, Date firstDate,
-			Date lastDate, Integer CategoryId) {
-		// TODO Auto-generated method stub
-		return piDao.getProductsAndImages(page, productId, productName, firstDate, lastDate, CategoryId);
+	public Integer addProductImageProductImage(ProductImage productImage,
+			BigInteger ProductId) {
+		return piDao.addProductImage(productImage, ProductId);
 	}
 
-/*	@Override
-	public List<ProductImage> getImagesByProductId(Integer productId) {
-		return piDao.getImagesByProductId(productId);
-	}*/
+	@Override
+	public List<ProductImage> getProductImageByProductId(BigInteger ProductId) {
+		return piDao.getProductImageByProductId(ProductId);
+	}
+
+	@Override
+	public Integer deleteProductImageByProductId(BigInteger productId) {
+		return piDao.deleteProductImageByProductId(productId);
+	}
 	
 }

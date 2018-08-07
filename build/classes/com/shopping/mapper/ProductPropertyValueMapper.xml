@@ -19,4 +19,7 @@
 		<association property="product" resultMap="com.shopping.dao.ProductDao.SuperResultMap" />
 	</resultMap>
 
+	<delete id = "deleteProductPropertyValueByProductId">
+		delete from productPropertyValue where productId = #{productId}
+	</delete>
 </mapper>

@@ -19,7 +19,7 @@ public class ProductServiceImplTest {
 		Page<Map> page = new Page<Map>();
 		page.setPageSize(5);
 		page.setPageNo(1);
-		List<Map> productList = userService.getProducts(page, "Æìº½", null, null, 1);
+		List<Map> productList = userService.getProducts(page, "f", null, null, 1);
 		
 		for (Map map : productList) {
 			System.out.println(map);

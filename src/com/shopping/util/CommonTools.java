@@ -22,4 +22,13 @@ public class CommonTools {
 		System.out.println(dateTest);
 		return date;
 	}
+	
+	public static boolean ArrayDetectNull(Object[] array) {
+		for (Object obj : array) {
+			if (obj == null) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

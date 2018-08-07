@@ -40,11 +40,11 @@
 			@Param("lastDate") Date lastDate); -->
 			
 	<sql id="selectCondition">
-		<where>
+		<where>	
 			<if test = "productName != null and productName != ''">
 				and p.productName like concat ('%',#{productName},'%')
 			</if>
-			<if test = "firstDate != null and lastDate != null ">
+			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
 				and p.productCreateDate between #{firstDate} and #{lastDate}
 			</if>
 			<if test = "categoryThreeId != null and categoryThreeId != 0">
@@ -62,13 +62,13 @@
 	</update>
 	
 	<delete id= "delete">
-		delete from product set productId = #{productId}
+		delete from product where productId = #{productId}
 	</delete>
 
 	<select id="getProducts" resultType = "Map">
 		select p.*,pi.productImagePath,sum(pt.restQuantity) restQuantity from product p
-		 inner join productImage pi on pi.productId = p.productId
-		 inner join productType pt on pt.productId = p.productId
+		 left join productImage pi on pi.productId = p.productId
+		 left join productType pt on pt.productId = p.productId
 		<include refid = "selectCondition" />
 		group by p.productId
 		order by productId asc
@@ -76,8 +76,8 @@
 		limit #{page.firstIndex},#{page.pageSize}
 	</select>
 	
-	<select id = "getProductByProductId" resultType = "BaseResultMap">
-		select * from product where productId = #{productId} limit 1;
+	<select id = "getProductByProductId" resultMap = "FullResultMap">
+		select * from product where productId = #{productId} limit 1
 	</select>
 	
 	<select id="getCount" resultType="Integer">

@@ -11,4 +11,6 @@ import com.shopping.service.ProductPropertyService;
 public class ProductPropertyServiceImpl implements ProductPropertyService {
 	@Resource
 	private ProductPropertyDao ppDao;
+	
+	
 }

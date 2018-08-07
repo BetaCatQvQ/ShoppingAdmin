@@ -42,7 +42,7 @@
 				and productTypeCreateDate between #{firstDate} and #{lastDate}
 			</if>
 			<if test = "productId != null and productId >= 0">
-				and productId = #{productId}
+				and productId = #{productId}+
 			</if>
 		</where>
 	</sql> -->
@@ -56,8 +56,8 @@
 	</select>
 	
 	<insert id = "addProductType">
-		insert into productType values (#{productTypeId},#{product.productId},#{productTypeName},
-		#{price},#{salePrice},#{productTypeImagePath},now())
+		insert into productType values (null,#{product.productId},#{productTypeName},
+		#{price},#{salePrice},#{restQuantity},#{productTypeImagePath},now())
 	</insert>
 	
 	<update id = "updateProductType">
@@ -68,5 +68,9 @@
 	
 	<delete id = "deleteProductType">
 		delete from productType where productTypeId = #{productTypeId}
+	</delete>
+	
+	<delete id = "deleteProductTypeByProductId">
+		delete from productType where productId = #{productId}
 	</delete>
 </mapper>
