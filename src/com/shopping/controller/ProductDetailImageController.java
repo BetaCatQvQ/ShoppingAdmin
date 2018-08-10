@@ -22,7 +22,7 @@ public class ProductDetailImageController {
 			if (productId == null) {
 				return null;
 			}
-			List<ProductDetailImage> imageList = pdiService.deleteProductDetailImageByProductId(productId)
+			List<ProductDetailImage> imageList = pdiService.getProductDetailImageByProductId(productId);
 		return imageList;
 	}
 }

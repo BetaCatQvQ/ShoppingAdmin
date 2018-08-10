@@ -11,14 +11,27 @@
 		<result column="status" property="status" />
 	</resultMap>
 
-	<resultMap type="OrderItem" id="FullResultMap" extends="BaseResultMap">
-		<association property="productType" resultMap="com.shopping.dao.ProductTypeDao.BaseResultMap" />
-		<association property="order" resultMap="com.shopping.dao.OrderDao.BaseResultMap" />
+	<resultMap type="OrderItem" id="FullResultMap"
+		extends="BaseResultMap">
+		<association property="productType"
+			resultMap="com.shopping.dao.ProductTypeDao.BaseResultMap" />
+		<association property="order"
+			resultMap="com.shopping.dao.OrderDao.BaseResultMap" />
 	</resultMap>
 
-	<resultMap type="OrderItem" id="SuperResultMap" extends="BaseResultMap">
-		<association property="productType" resultMap="com.shopping.dao.ProductTypeDao.SuperResultMap" />
-		<association property="order" resultMap="com.shopping.dao.OrderDao.SuperResultMap" />
+	<resultMap type="OrderItem" id="SuperResultMap"
+		extends="BaseResultMap">
+		<association property="productType"
+			resultMap="com.shopping.dao.ProductTypeDao.SuperResultMap" />
+		<association property="order"
+			resultMap="com.shopping.dao.OrderDao.SuperResultMap" />
 	</resultMap>
-
+	<select id="getOrderById" resultMap="BaseResultMap">
+		SELECT * FROM `orderitem`
+		WHERE orderItemId = #{orderItemId}
+	</select>
+	<update id="updateOrderStarts">
+		UPDATE `orderitem` SET `status` = #{orderItem.status}
+		WHERE `orderItemId` = #{orderItem.orderItemId}
+	</update>
 </mapper>

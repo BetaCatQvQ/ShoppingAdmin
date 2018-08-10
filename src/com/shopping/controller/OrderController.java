@@ -1,12 +1,12 @@
 package com.shopping.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.shopping.entity.Page;
@@ -25,9 +25,9 @@ public class OrderController {
 		model.addAttribute("orders", page);
 		return "listOrder";
 	}
-	@RequestMapping("/updateOrder")
-	public String updateOrder(String status) {
+	@RequestMapping("/orderDelivery{order_id}")
+	public String orderDelivery(@PathVariable Integer order_id) {
 		
-		return "redirect:/listOrder.action";
+	return "redirect:/listOrder.action";	
 	}
 }

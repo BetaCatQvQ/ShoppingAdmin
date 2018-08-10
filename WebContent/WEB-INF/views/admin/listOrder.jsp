@@ -71,20 +71,27 @@
 									<div class="row">
 										<div class="col-sm-6">
 											<div class="dataTables_length" id="dataTables-example_length">
-												<label><select name="dataTables-example_length"
-													aria-controls="dataTables-example"
+												<label>
+												<select name="dataTables-example_length"
+													aria-controls="dataTables-example" id="dataTables-example_SelectVal"
 													class="form-control input-sm"><option value="2">2</option>
 														<option value="5">5</option>
 														<option value="7">7</option>
-														<option value="10">10</option></select> records per page</label>
+														<option value="10">10</option></select> <small>records per page</small></label>
 											</div>
+											<!-- select group -->
 										</div>
-										<div class="col-sm-6">
-											<div id="dataTables-example_filter" class="dataTables_filter">
-												<label>Search:<input type="search"
-													class="form-control input-sm"
-													aria-controls="dataTables-example"></label>
+										<div class="col-sm-3"><!-- null --></div>
+										<div class="col-sm-3">
+											<div class="input-group">
+												<input type="text" class="form-control" placeholder="请输入订单ID..." id="dataTables-example_filter_Search">
+												<span class="input-group-btn"> <input
+													class="btn btn-default " id="searchButton"
+													onclick="getbySerach()" type="button" value="Search!" />
+												</span>
+												<!-- input group -->
 											</div>
+											<small>search order Id</small>
 										</div>
 									</div>
 									<table class="table table-striped table-bordered table-hover"
@@ -123,10 +130,17 @@
 													<td>${o.orderPayDate}</td>
 													<td>${o.orderDeliveryDate}</td>
 													<td>${o.orderConfirmDate}</td>
-													<td>${o.status}</td>
 													<td>
-														<form action="updateOrder.action" role="form">
-															<%-- 表单隐藏信息 --%>
+														<c:if test="${o.status == 1}">待付款</c:if>
+														<c:if test="${o.status == 2}">待发货</c:if>
+														<c:if test="${o.status == 3}">待收货</c:if>
+														<c:if test="${o.status == 4}">派送中</c:if>
+														<c:if test="${o.status == 5}">待评价</c:if>
+														<c:if test="${o.status == 6}">已完成</c:if>
+													</td>
+													<td>
+														<%-- <form action="updateOrder.action" role="form">
+															表单隐藏信息
 															<input type="hidden" name="orderId" value="${o.orderId}">
 															<input type="hidden" name="orderItemId"
 																value="${o.orderItemId}"> <input type="hidden"
@@ -142,28 +156,51 @@
 																name="orderDeliveryDate" value="${o.orderDeliveryDate}">
 															<input type="hidden" name="orderConfirmDate"
 																value="${o.orderConfirmDate}">
-															<%-- 更改表单状态 --%>
-															<c:if test="${o.status== 5}">
-																<a href="orderDelivery?order_id=${o.orderId}">
+															更改表单状态 --%>
+															<c:if test="${o.status== 1}">
+																<a href="${rt }/orderItem/orderItemDelivery/${o.orderItemId}.action">
+																	<button class="btn btn-primary btn-xs">付款</button>
+																</a>
+															</c:if>
+															<c:if test="${o.status== 2}">
+																<a href="${rt }/orderItem/orderItemDelivery/${o.orderItemId}.action">
 																	<button class="btn btn-primary btn-xs">发货</button>
 																</a>
 															</c:if>
-															<select name="status" class="form-control">
+															<c:if test="${o.status== 3}">
+																<a href="${rt }/orderItem/orderItemDelivery/${o.orderItemId}.action">
+																	<button class="btn btn-primary btn-xs">收货</button>
+																</a>
+															</c:if>
+															<c:if test="${o.status== 4}">
+																<a href="${rt }/orderItem/orderItemDelivery/${o.orderItemId}.action">
+																	<button class="btn btn-primary btn-xs">派送</button>
+																</a>
+															</c:if>
+															<c:if test="${o.status== 5}">
+																<a href="${rt }/orderItem/orderItemDelivery/${o.orderItemId}.action">
+																	<button class="btn btn-primary btn-xs">评价</button>
+																</a>
+															</c:if>
+															<%--<select name="status" class="form-control">
 																<option>待付款</option>
 																<option>已发货</option>
 																<option>订单完成</option>
 															</select> <input type="submit" class="form-control" value="提交">
-														</form>
+														</form>--%>
 													</td>
 												</tr>
 											</c:forEach>
+												<tr><td id="pageSize" style="display: none;">${orders.pageSize }</td></tr>
+												<tr><td id="pageNo" style="display: none;">${orders.pageNo }</td></tr>
+												<tr><td id="pageCount" style="display: none;">${orders.pageCount }</td></tr>
 										</tbody>
 									</table>
 									<div class="row">
 									<div class="col-sm-6">
 										<div class="dataTables_info" id="dataTables-example_info"
 											role="alert" aria-live="polite" aria-relevant="all">Showing
-											1 to 2 of 2 entries</div>
+											${orders.pageNo } to ${orders.pageCount } of ${orders.pageCount } entries</div>
 									</div>
 									<div class="col-sm-6">
 										<div class="dataTables_paginate paging_simple_numbers"
@@ -199,5 +236,7 @@
 	<script src="../assets/js/jquery-1.10.2.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<!-- DoepOrder_Search_row.js -->
+	<script src="../assets/js/dataTables/DropOrder_Search_row.js"></script>
 </body>
 </html>

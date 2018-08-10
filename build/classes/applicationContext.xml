@@ -19,7 +19,7 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/shopping?characterEncoding=utf-8" />
 		<property name="username" value="root" />
-		<property name="password" value="Dark,Darker,YetDarker" />
+		<property name="password" value="123456" />
 	</bean>
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
