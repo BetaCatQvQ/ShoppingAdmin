@@ -20,6 +20,4 @@ public interface OrderDao {
 			@Param("startConfirmTime") Date startConfirmTime, @Param("endConfirmTime") Date endConfirmTime);
 
 	public Order getOrderById(@Param("orderId") Integer orderId);
-	
-	public Integer updateOrder(@Param("status")Integer status);
 }

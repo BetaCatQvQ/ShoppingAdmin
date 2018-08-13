@@ -77,4 +77,10 @@ public class OrderItem {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		return "OrderItem [orderItemId=" + orderItemId + ", productType=" + productType + ", order=" + order
+				+ ", quantity=" + quantity + ", remark=" + remark + ", status=" + status + "]";
+	}
+	
 }

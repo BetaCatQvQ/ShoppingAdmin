@@ -86,7 +86,7 @@
 							<div class="panel-body">
 								<div class="table-responsive">
 									<div class="row">
-										<div class="col-sm-4">
+										<div class="col-sm-6">
 											<div class="dataTables_length" id="dataTables-example_length">
 												<label> <input id="pageSize" type="hidden"
 													value="${page.pageSize }" /> <select onclick="getByPage()"
@@ -101,15 +101,16 @@
 												</label>
 											</div>
 										</div>
-										<div class="col-sm-4"></div>
-										<div class="col-lg-4">
+										<div class="col-sm-3"></div>
+										<div class="col-lg-3">
 											<div class="input-group">
-												<input type="text" class="form-control" id="searchParams">
+												<input type="text" class="form-control" placeholder="请输入分类名称..." id="searchParams">
 												<span class="input-group-btn"> <input
 													class="btn btn-default" id="searchButton"
 													onclick="getbySerach()" type="button" value="Search!" />
 												</span>
 											</div>
+												<small>search category Name</small>
 											<!-- /input-group -->
 										</div>
 									</div>
@@ -135,7 +136,7 @@
 														href="editCategory.action?id=${c.categoryOneId}"><span
 															class="glyphicon glyphicon-th-list"></span></a></td>
 													<td id="listProduct"><a
-														href="listProduct?category_id=${c.categoryOneId}"><span
+														href="${rt }/product/listProduct.action?category_id=${c.categoryOneId}&category='一级分类'"><span
 															class="glyphicon glyphicon-shopping-cart"></span></a></td>
 													<td id="hidden">一级分类</td>
 												</tr>
@@ -181,7 +182,7 @@
 	Metis Menu Js
 	<!-- <script src="../assets/js/jquery.metisMenu.js"></script> -->
 	Dropdown_Search_row.js
-	<script src="../assets/js/dataTables/Dropdown_Search_row.js"></script>
+	<script src="../assets/js/dataTables/DropCategory_Search_row.js"></script>
 	DATA TABLE SCRIPTS
 	<!-- <script src="../assets/js/dataTables/jquery.dataTables.js"></script> -->
 	<!-- <script src="../assets/js/dataTables/dataTables.bootstrap.js"></script> -->
