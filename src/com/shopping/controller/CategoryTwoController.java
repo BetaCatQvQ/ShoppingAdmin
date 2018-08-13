@@ -36,6 +36,13 @@ public class CategoryTwoController {
 		return page;
 	}
 	
+	@RequestMapping("/listTwoByOne")
+	@ResponseBody
+	public Object getCategoryTwoByOne(Integer categoryOneId) {
+		List<CategoryTwo> twos = ct.SearchByCategoryOne(categoryOneId);
+		return ct.SearchByCategoryOne(categoryOneId);
+	}
+	
 	@RequestMapping("/getBysearch")
 	@ResponseBody
 	public Object getBysearch(String searchParams,Integer selectVal,Page<CategoryOne> page) {
@@ -43,5 +50,14 @@ public class CategoryTwoController {
 		System.out.println(searchParams);
 		ct.search(searchParams, page);
 		return page;
+	}
+	
+	@RequestMapping("/getCategoryTwoById")
+	@ResponseBody
+	public CategoryTwo getCategoryThreeById(Integer categoryTwoId) {
+		CategoryTwo cateTwo = ct.getCateTwoById(categoryTwoId);
+		/*System.out.println("CategoryTwoId:");
+		System.out.print(categoryTwoId);*/
+		return ct.getCateTwoByIdFull(categoryTwoId);
 	}
 }

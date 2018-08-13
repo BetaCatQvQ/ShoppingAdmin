@@ -28,8 +28,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Map> getProducts(Page page, /*BigInteger productId,*/
 			String productName, String firstDate, String lastDate,
-			Integer CategoryId) {
-		List<Map> products = pDao.getProducts(page, /*productId,*/ productName, firstDate, lastDate, CategoryId);
+			Integer CategoryId,String categoryType) {
+			List<Map> products = pDao.getProducts(page, productName, firstDate, lastDate, CategoryId, categoryType);
+
 		for (int i = 0;i < products.size(); i++) {
 			Map map = products.get(i);
 			//System.out.println(map.get("productCreateDate"));
@@ -58,8 +59,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Integer getCount(@SuppressWarnings("rawtypes") Page page, /*BigInteger productId,*/ String productName,
-			String firstDate, String lastDate, Integer CategoryId) {
-		return pDao.getCount(page, /*productId,*/ productName, firstDate, lastDate, CategoryId);
+			String firstDate, String lastDate, Integer CategoryId, String categoryType) {
+		return pDao.getCount(page, /*productId,*/ productName, firstDate, lastDate, CategoryId,categoryType);
 	}
 
 	@Override

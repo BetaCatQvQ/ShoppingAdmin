@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.shopping.dao.CategoryOneDao;
 import com.shopping.entity.CategoryOne;
+import com.shopping.entity.CategoryTwo;
 import com.shopping.entity.Page;
 import com.shopping.service.CategoryOneService;
 

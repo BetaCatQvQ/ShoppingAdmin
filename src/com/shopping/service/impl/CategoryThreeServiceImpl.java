@@ -40,6 +40,11 @@ public class CategoryThreeServiceImpl implements CategoryThreeService{
 	public Integer uptCateThree(CategoryThree categoryThree) {
 		return ctDao.uptCateThree(categoryThree);
 	}
+	
+	@Override
+	public CategoryThree getCateThreeById(Integer categoryThreeId) {
+		return ctDao.getCateThreeById(categoryThreeId);
+	}
 
 	@Override
 	public void search(String categoryThreeName,Page page) {
@@ -48,4 +53,9 @@ public class CategoryThreeServiceImpl implements CategoryThreeService{
 		List<CategoryThree> categoryThrees=  ctDao.Search(categoryThreeName, page);
 		page.setData(categoryThrees);
 	}
+
+	@Override
+	public List<CategoryThree> SearchByCategoryTwo(Integer categoryTwoId) {
+		return ctDao.SearchByCategoryTwo(categoryTwoId);
+	}	
 }

@@ -1,9 +1,7 @@
 package com.shopping.controller;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -13,10 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.shopping.entity.CategoryOne;
 import com.shopping.entity.CategoryThree;
+import com.shopping.entity.CategoryTwo;
 import com.shopping.entity.Page;
 import com.shopping.entity.Product;
 import com.shopping.entity.ProductType;
+import com.shopping.service.CategoryOneService;
+import com.shopping.service.CategoryThreeService;
+import com.shopping.service.CategoryTwoService;
 import com.shopping.service.ProductDetailImageService;
 import com.shopping.service.ProductImageService;
 import com.shopping.service.ProductPropertyValueService;
@@ -43,28 +46,39 @@ public class ProductController {
 	
 	@Resource
 	private ProductPropertyValueService productPropertyValueService;
+	
+	@Resource
+	private CategoryOneService cos;
+	
+	@Resource
+	private CategoryTwoService cts;
+	
+	@Resource
+	private CategoryThreeService cths;
 
 	@RequestMapping("/showProducts")
 	public String showProducts(Model model) {
 		
+		String categoryType = "三级分类";
 		Page page = new Page();
 		page.setPageNo(1);
 		/*page.setPageCount(totalPage);*/	
 		page.setPageSize(10);
 		page.setRowCount(productService.getCount(page, /* searchId, */
-				null, null, null, 1));
+				null, null, null, 1, categoryType));
 		page.setData(productService.getProducts(page, /* searchId, */null,
-				null, null, 1));
+				null, null, 1, categoryType));
 		
 		model.addAttribute("page", page);
 		System.out.println("showProducts");
 		return "listProduct";
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/searchProducts")
 	@ResponseBody
 	public Page<Product> getProductsByPage(String searchName, String firstDate, String lastDate,
-			Integer categoryId, Integer currentPage,Integer pageSize) {
+			Integer categoryId, Integer currentPage,Integer pageSize,String categoryType) {
 		
 		System.out.println("searchProducts");
 		
@@ -73,9 +87,9 @@ public class ProductController {
 		/*page.setPageCount(totalPage);*/	
 		page.setPageSize(pageSize);
 		page.setRowCount(productService.getCount(page, /* searchId, */
-				searchName, firstDate, lastDate, categoryId));
+				searchName, firstDate, lastDate, categoryId, categoryType));
 		page.setData(productService.getProducts(page, /* searchId, */searchName,
-				firstDate, lastDate, categoryId));
+				firstDate, lastDate, categoryId, categoryType));
 		return page;
 	}
 
@@ -109,14 +123,17 @@ public class ProductController {
 	@RequestMapping("/editProduct")
 	@ResponseBody
 	public Integer editProduct(/*Integer currentPage,Integer pageSize,*/ BigInteger productId,
-			String productName/*,Integer categoryThreeId*/) {
+			String productName,Integer categoryThreeId) {
 		
 		System.out.println(productId);
 		System.out.println(productName);
 		
+		CategoryThree categoryThree = new CategoryThree();
+		categoryThree.setCategoryThreeId(categoryThreeId);
 		Product product = new Product();
 		product.setProductId(productId);
 		product.setProductName(productName);
+		product.setCategoryThree(categoryThree);
 		product.setProductCreateDate(new Date());
 		
 		Integer insertResult = productService.update(product);
@@ -150,10 +167,9 @@ public class ProductController {
 	@RequestMapping("/getProductByProductId")
 	@ResponseBody
 	public Product getProductByProductId(BigInteger productId) {
+		
 		Product product = productService.getProductByProductId(productId);
-		System.out.println("getProductByProductId");
-		System.out.println(productId);
-		System.out.println(product);
+		
 		return product;
 	}
 }

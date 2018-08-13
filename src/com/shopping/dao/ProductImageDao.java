@@ -22,4 +22,6 @@ public interface ProductImageDao {
 	
 	public Integer deleteProductImageByProductId(BigInteger productId);
 	
+	public Integer delete(Integer productImageId);
+	
 }

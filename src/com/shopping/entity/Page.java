@@ -26,6 +26,7 @@ public class Page<T> {
 			pageCount = 1;
 			return pageCount;
 		}else {
+			System.out.println("pageCount="+(rowCount - 1) / pageSize + 1);
 			return (rowCount - 1) / pageSize + 1;
 		}
 	}
@@ -58,6 +59,14 @@ public class Page<T> {
 	public Integer getFirstIndex(){
 		return (pageNo-1) * pageSize;
 	}
+	
+	@Override
+	public String toString() {
+		return "Page [pageNo=" + pageNo + ", pageCount=" + pageCount
+				+ ", pageSize=" + pageSize + ", rowCount=" + rowCount
+				+ ", data=" + data + "]";
+	}
+	
 	
 /*	public Page(Integer pageCount, Integer pageSize, Integer rowCount,
 			List<T> data) {

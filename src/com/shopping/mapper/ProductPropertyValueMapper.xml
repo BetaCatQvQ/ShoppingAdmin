@@ -22,4 +22,27 @@
 	<delete id = "deleteProductPropertyValueByProductId">
 		delete from productPropertyValue where productId = #{productId}
 	</delete>
+	
+	<insert id = "add">
+		insert into productPropertyValue values(null,#{productProperty.productPropertyId},#{product.productId},#{productPropertyValueName})
+	</insert>
+	
+	<update id = "edit">
+		update productPropertyValue set productPropertyValueName = #{productPropertyValueName},
+		productPropertyId = #{productProperty.productPropertyId} where productPropertyValueId = #{productPropertyValueId}
+	</update>
+	
+	<delete id = "delete">
+		delete from productPropertyValue where productPropertyValueId = #{productPropertyValueId}
+	</delete>
+	
+	<delete id = "deleteByProductPropertyId">
+		delete from productPropertyValue where productPropertyId = #{productPropertyId}
+	</delete>
+	
+	<select id = "list" resultMap = "FullResultMap">
+		select ppv.*,pp.productPropertyName from productPropertyValue ppv 
+		inner join productProperty pp on pp.productPropertyId = ppv.productPropertyId
+		where ppv.productId = #{productId}
+	</select>
 </mapper>

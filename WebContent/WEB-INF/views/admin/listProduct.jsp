@@ -27,319 +27,24 @@
 	<script src="${root }/assets/js/bootstrap.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${root }/assets/js/jquery.metisMenu.js"></script>
+	<script src="${root }/js/showingActions.js"></script>
+	<script src="${root }/js/updateActions.js"></script>
+	<script src="${root }/js/windowsOperation.js"></script>
+	
 	<!-- DATA TABLE SCRIPTS -->
 	<script>
 		$(document).ready(function() {
-			//$('#dataTables-example').dataTable();
-			//pageAction("page");
 		});
-
-	</script>
-	
-	<script>
-	
-	//显示数据的方法
-	
-	function pageAction(turningType) {
-		var currentPage = $('#currentPageHidden').val();
-		var getTotalPage = $('#totalPageHidden').val();
-		var pageSize = $('#pageSize').val();
-		/* var searchId = null; */
-		var searchName = $('#searchMessageHidden').val();
-		var firstDate = $('#firstDateHidden').val();
-		var lastDate = $('#lastDateHidden').val();
-		var categoryThreeId = 1;
-		/* //提交给后台的查询参数
-		var param = ""; */
-		switch (turningType) {
-		case "first":
-			if (currentPage != 1) {
-				currentPage = 1;
-				//          $('#cpage').text(currentPage);
-			} else {
-				alert("已是首页！");
-			}
-			;
-			break;
-		case "previous":
-			if (currentPage > 1) {
-				currentPage--;
-				//  $('#cpage').text(currentPage);
-			} else {
-				alert("已是首页！");
-			}
-			;
-			break;
-		case "next":
-			if (parseInt(currentPage) < parseInt(getTotalPage)) {
-				currentPage++;
-				/// $('#cpage').text(currentPage);
-			} else {
-				alert("已是尾页！");
-			}
-			;
-			break;
-		case "last":
-			if (currentPage != getTotalPage) {
-				currentPage = getTotalPage
-				// $('#cpage').text(currentPage);
-			} else {
-				alert("已是尾页！");
-
-			}
-			;
-			break;
-
-		case "jump":
-			if ($('#jumpPage').val() > getTotalPage) {
-				currentPage = getTotalPage;
-			} else {
-				currentPage = $('#jumpPage').val();
-				$('#thisPage').val(currentPage);
-			}
-			break;
-		
-		case "search":
-			/* param = $('searchForm').serialize(); */
-			/* searchId = $('#searchId').text(); */
-			searchName = $('#searchMessage').val();
-			firstDate = $('#firstDate').val().replace("T"," ");
-			lastDate = $('#lastDate').val().replace("T"," "); 
-			
-			/* alert(firstDate);
-			alert(lastDate); */
-			$('#searchMessageHidden').val(searchName);
-			$('#firstDateHidden').val(firstDate);
-			$('#lastDateHidden').val(lastDate);
-			break;
-		}		
-		
-		console.log("searchName:"+searchName);
-		$.post("../product/searchProducts.action",{
-						"currentPage" : currentPage,
-						/* "totalPage" : getTotalPage, */
-						"pageSize" : pageSize,
-						"categoryId" : categoryThreeId,
-						"searchName" : searchName,
-						"firstDate" : firstDate,
-						"lastDate" : lastDate
-						},
-						function(page) {
-						//回调函数执行了不给调用者看到
-						var testData = page;						
-						if (page != null) {
-							$('#currentPageHidden').val(page.pageNo);
-							$('#totalPageHidden').val(page.pageCount);
-							$('#totalPage').text(page.pageNo);
-							$('#thisPage').text(page.pageCount);
-							$('#listBody').html("");//清空table数据
-							console.log(page);
-							jQuery
-									.each(
-											page.data,
-											function(i, p) {
-												
-												var imageHtml = "无";
-												
-												if (p.productImagePath != '' && p.productImagePath != null) {
-													imageHtml = "<img src = '${root}/"
-														+ p.productImagePath
-														+ "'  />"
-												}
-												
-												var showList = "<tr><td>"
-														+ p.productId
-														+ "</td>"
-														+ "<td>"
-														+ imageHtml
-														+ "<td>"
-														+ p.productName
-														+ "</td>"
-														+ "<td>"
-														+ p.restQuantity
-														+ "</td>"
-														+ "<td>" + p.productCreateDate
-														+ "</td>"
-														+ "<td><a><span class='glyphicon glyphicon-edit' onclick = showUpdateWindow('edit','"
-														+ p.productId
-														+ "')></span></a></td>"
-														+ "<td><a><span class='glyphicon glyphicon-pcture'  onclick = showUpdateWindow('imageEdit','"
-														+ p.productId
-														+ "')></span></a></td>"
-														+ "<td><a><span class='glyphicon glyphicon-list'></span></a></td>"
-														+ "<td><a><span class='glyphicon glyphicon-trash' onclick = showUpdateWindow('delete','"+p.productId+"')></span></a></td>";
-														
-														//console.log(showList);
-												/* <th>产品id</th>
-												<th>产品图片</th>
-												<th>产品名称</th>
-												<th>产品总销量</th>
-												<th>产品库存</th> */
-												
-												$('#listBody').append(showList);
-											});
-						} else {
-							alert("没有该页数据");
-							$('#totalPage').val(1);
-						}
-					},"json");
-	}
-	
-	//更新数据的操作
-	
-	function updateProductAction(actionType) {
-		var url = "../product/addProduct.action";
-		var selectedProductId = $("#selectedProductId").val();
-		var productName = $("#add_productName").val();
-		var categoryThreeId = 1;
-		switch (actionType) {
-			case "add":
-				url = "../product/addProduct.action";
-				var productName = $("#add_productName").val();
-				break;
-			case "edit":
-				url = "../product/editProduct.action";
-				var productName = $("#edit_productName").val();
-				break;
-			case "delete":
-				url = "../product/deleteProduct.action";
-				break;
-		}
-
-		$.post(url,{
-			"productId" : selectedProductId,
-			"productName" : productName,
-			"categoryThreeId" : categoryThreeId
-		},function(data){
-			if (data == 1) {
-				cancelWindow(actionType);
-				pageAction("");
-			}
-		},"json");
-	}
-	
-	function getProductById() {
-		var productId = $("#selectedProductId").val();
-		var url = "../product/getProductByProductId.action";
-		$.post(url,{
-			"productId" : productId
-		},function(product) {
-			if (product != null) {
-				$("#edit_productName").val(product.productName);
-			}
-			//alert(product);
-		},"json");
-	}
-	
-	function getInformationByProductId(actionType) {
-		var productId = $("#selectedProductId").val();
-		var url = ""
-		
-		switch (actionType) {
-			case "productImage":
-					url = "../productImage/getProductImagesByProductId";
-				break;
-			case "productDetailImage":
-					url = "../productDetailImage/getProductDetailImagesByProductId";
-				break;
-			case "productPropertyValue":
-					url = "../productPropertyValue/getPropertyValuesFromProduct";
-				break;
-			case "productType":
-					url = "../productType/getProductTypesByProductId";
-				break;
-		}
-		
-		$.post(url,{
-			"productId" : productId
-		},function(data) {
-			return data;
-		},"json");
-	}
-	
-	</script>
-	
-	<script>
-		function showUpdateWindow(windowType,productId) {			
-			switch (windowType) {
-				case "add":
-						$("#addWindow").slideDown(300);
-	                    $("#background").show();	
-					break;
-				case "edit":
-						$("#editWindow").slideDown(300);
-						$("#background").show();
-						$("#selectedProductId").val(productId);
-						//alert(productId);
-						getProductById();
-					break;
-				case "delete":
-						$("#deleteWindow").slideDown(500);
-						$("#background").show();
-						$("#selectedProductId").val(productId);
-					break;
-				case "imageEdit":
-						$("#imageEditWindow").slideDown(500);
-						$("#background").show();
-						$("#selectedProductId").val(productId);
-					break;
-			}
-		}
-		
-		function cancelWindow(windowType) {
-			switch (windowType) {
-				case "add":
-						$("#addWindow").slideUp(300);
-	                    $("#background").hide();
-	                    $("#addWindow input").val("");
-					break; 
-				case "edit":
-						$("#editWindow").slideUp(300);
-						$("#background").hide();
-						$("#editWindow input").val("");
-					break;
-				case "delete":
-						$("#deleteWindow").slideUp(500);
-						$("#background").hide();
-					break;
-				case "imageEdit":
-						$("#imageEditWindow").slideUp(500);
-						$("#background").hide();
-						$("#selectedProductId").val(productId);
-					break;
-			}
-		}
 	</script>
 </head>
 <body>
 	<div id="wrapper">
-	
-		<!-- <nav class="navbar navbar-default top-navbar" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".sidebar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="listCategory">Tmall</a>
-			</div>
-		</nav>
-
-		/. NAV TOP 
-		<nav class="navbar-default navbar-side" role="navigation">
-			<div class="sidebar-collapse">
-				<ul class="nav" id="main-menu">
-
-					<li><a class="active-menu" href="listCategory"><i
-							class="fa fa-bars"></i> 分类管理</a></li>
-					<li><a href="listUser"><i class="fa fa-user"></i> 用户管理</a></li>
-					<li><a href="listOrder"><i class="fa fa-list-alt"></i>
-							订单管理</a></li>
-					<li><a href="listLink"><i class="fa fa-link"></i> 推荐链接管理</a></li>
-				</ul>
-			</div>
-		</nav> -->
+		
+		<!-- 全局变量 -->
+		<input type = "hidden" id = "root" name = "root" value = "${root }"/>
+		<input type = "hidden" id = "m_categoryThreeId" name = "m_categoryThreeId" value = "1" />
+		<input type = "hidden" id = "m_categoryTwoId" name = "m_categoryTwoId" value = "1" />
+		<input type = "hidden" id = "m_categoryOneId" name = "m_categoryOneId" value = "1" />
 		<!-- /. NAV SIDE  -->
 		<div id="page-wrapper">
 			<div id="page-inner">
@@ -386,9 +91,10 @@
 												<th>产品名称</th>
 												<th>产品总库存</th>
 												<th>产品创建日期</th>
-
+												
 												<th>编辑产品</th>
 												<th>编辑图片</th>
+												<th>编辑属性</th>
 												<th>编辑分类</th>
 												<th>删除产品</th>
 											</tr>
@@ -406,6 +112,8 @@
 															class="glyphicon glyphicon-edit" onclick = "showUpdateWindow('edit','${p.productId}')"></span></a></td>
 													<td><a><span
 															class="glyphicon glyphicon-picture" onclick = "showUpdateWindow('imageEdit','${p.productId}')"></span></a></td>
+													<td><a><span
+															class="glyphicon glyphicon-list" onclick = "showUpdateWindow('propertyEdit','${p.productId}')"></span></a></td>
 													<td><a><span
 															class="glyphicon glyphicon-list"></span></a></td>
 													<td><a><span
@@ -491,7 +199,10 @@
             <label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick="cancelWindow('add')">x</label>
             	<label>请输入产品名称:</label><input type = "text" name = "add_productName" id = "add_productName" />
             	<button id = "addProductButton" name = "addProductButton" onclick = "updateProductAction('add')">添加</button>
-            	<button id = "cancelButton" name = "cancelButton" onclick = "cancelWindow('add')">取消</button>
+            	<button name = "cancelButton" onclick = "cancelWindow('add')">取消</button>
+            	<select id = "addCategoryOneBox" name = "addcategoryOneBox" onchange = "getCategoryTwoList('add')"></select>
+            	<select id = "addCategoryTwoBox" name = "addcategoryTwoBox" onchange = "getCategoryThreeList('add')"></select>
+            	<select id = "addCategoryThreeBox" name = "addcategoryThreeBox"></select>
     </div>
     
     <!-- 修改窗口 -->
@@ -500,8 +211,16 @@
             <label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('edit')">x</label>
             	<label>请输入产品名称:</label><input type = "text" name = "edit_productName" id = "edit_productName" />
             	<button id = "editProductButton" name = "editProductButton" onclick = "updateProductAction('edit')">修改</button>
-            	<button id = "cancelButton" name = "cancelButton" onclick = "cancelWindow('edit')">取消</button>
+            	<button name = "cancelButton" onclick = "cancelWindow('edit')">取消</button>
+            	<select id = "editCategoryOneBox" name = "editcategoryOneBox" onchange = "getCategoryTwoList('edit')"></select>
+            	<select id = "editCategoryTwoBox" name = "editcategoryTwoBox" onchange = "getCategoryThreeList('edit')"></select>
+            	<select id = "editCategoryThreeBox" name = "editcategoryThreeBox"></select>
     </div>
+    
+    <!-- 分类全局变量 -->
+    
+    <input type = "hidden" id = "addHasCategoryList" name = "addHasCategoryList" value = "0" />
+    <input type = "hidden" id = "editHasCategoryList" name = "editHasCategoryList" value = "0" />
     
     <!-- 删除窗口 -->
     
@@ -509,21 +228,89 @@
             <label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('delete')">x</label>
             	<label>确定要删除吗</label><br/>
             	<button id = "deleteButton" name = "deleteButton" onclick = "updateProductAction('delete')">删除</button>
-            	<button id = "cancelButton" name = "cancelButton" onclick = "cancelWindow('delete')">取消</button>
+            	<button name = "cancelButton" onclick = "cancelWindow('delete')">取消</button>
     </div>
     
     <!-- 窗口信息 -->
 
+	<!-- 一级背景 -->
 	<div id = "background"></div>
+	<!-- 二级背景 -->
+	<div id = "background_2"></div>
     
     <input type = "hidden" name = "selectedProductId" id = "selectedProductId" value = "" />
     
     <!-- 图片管理 -->
     
-    <div class = "jumpWindow" id = "imageEdit">
+    <div class = "jumpWindow" id = "imageEditWindow">
     	<label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('imageEdit')">x</label>
+    		<div id = "imageManagerLeftBox">
+    			<label>产品图片</label>
+	    		<div id = "productImageBoxDiv" class = "imageBox" >
+	    		</div>	
+    		</div>
+    		<input type = "file" id = "btn_addProductImage_file" style = "display:none;" />
+    		<button name = "addImageButton" id = "addImageButton" onclick = "showPIFileWindow()">添加图片</button>
+    		<div id = "imageManagerRightBox">
+    			<label>详情图片</label>
+	    		<div id = "productDetailImageBoxDiv" class = "imageBox" >
+	    		</div>	
+    		</div>
+    		<input type = "file" id = "btn_addProductDetailImage_file" style = "display:none;" onclick = "showPDIFileWindow()"/>
+    		<button name = "addDetailImageButton" id = "addDetailImageButton" >添加详情图</button>
+    		<button name = "saveImagesManager" id = "saveImagesManager">保存</button>
+    		<button name = "cancelButton">取消</button>
+    </div>				
+    
+    <!-- 属性管理 -->
+    
+    <div class = "jumpWindow" id = "propertyEditWindow">
+    <label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('propertyEdit')">x</label>
+    	选择属性:<select id = "productPropertySelect" name = "productPropertySelect"></select>
+    	<button id = "btn_newProductProperty">设置属性名</button>
+    	请输入属性值:<input type = "text" id = "addProductPropertyValue" name = "addProductPropertyValue" />
+    	<button id = "btn_addProductPropertyValue" onclick = "addProductPropertyValue()">添加属性</button>
+    	<div id = "productPropertyListBox">
+    		<table id = "propertyListTable" border = "1">
+    			<tbody id = "propertyListBody">
+    			</tbody>
+    		</table>
+    	</div>
+    	<button id = "btn_saveProductProperty">确定</button>
     </div>
-
+    
+    <!-- 添加属性名 -->
+    
+    <div class = "jumpWindow" id = "newPropertyNameWindow">
+    <label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('newPropertyName')">x</label>
+    	请选择一级分类:<select id = "newPropertyCategoryOneBox" onchange = "getCategoryTwoList('newProperty')"></select>
+    	请选择二级分类:<select id = "newPropertyCategoryTwoBox" onchange = "listProductProperties('list','#propertyNameListBody')"></select>
+    	属性名:<input type = "text" id = "addProductPropertyName" />
+    	<button id = "btn_addProductProperty">添加属性名</button>
+    	<div id = "propertyNameListBox">
+    		<table id = "propertyNameListTable" border = "1">
+    			<thead id = "propertyNameListHead">
+    				<tr>
+    					<th>属性名称</th>
+    					<th>所属二级分类</th>
+    					<th colspan = "2">操作</th>
+    				</tr>
+    			</thead>
+    			<tbody id = "propertyNameListBody">
+    			</tbody>
+    		</table>
+    		<button id = "pp_goBackPage" onclick = "ppBoxPageAction('goBack')">&lt;</button>
+    		<button id = "pp_goForePage" onclick = "ppBoxPageAction('goFore')">&gt;</button>
+    		<label id = "ppPageNoLabel">0</label><label>/</label><label id = "ppPageCountLabel">0</label>
+    	</div>
+    	<button id = "btn_saveProductProperty" onclick="cancelWindow('newPropertyName')">确定</button>
+    	<input id = "productPropertyPageNo" type = "hidden" value = "1" />
+    	<input id = "productPropertyPageCount" type = "hidden" value = "0" />
+    	<input id = "firstInPPEdit" type = "hidden" value = "0" />
+    </div>
+    
+    <!-- 分类管理 -->
+    
 </body>
 	<style type = "text/css">
 		#productImageShow {
@@ -552,10 +339,10 @@
 		.jumpWindow {
             display: none; 
             position: absolute; 
-            top: 25%; 
-            left: 25%; 
-            width: 30%; 
-            height: 55%; 
+            top: 50%; 
+            left: 50%; 
+            width: 40%; 
+            height: 65%; 
             padding: 20px; 
             border: 3px solid #ccc; 
             background-color: white;
@@ -565,9 +352,9 @@
         
         .jumpWindow-closeButton:hover {cursor: pointer;color: rgb(55,198,192);}
         
-        #background {
+        #background,#background_2 {
             display: none; 
-            position: absolute; 
+            position: absolute;
             top: 0%; 
             left: 0%; 
             width: 100%; 
@@ -575,9 +362,107 @@
             background-color: black; 
             z-index:1; 
             -moz-opacity: 0.8; 
-            opacity:.80; 
-            filter: alpha(opacity=88);
+            opacity:.80;
+            filter: alpha(opacity=70);
         }
-        		
+        
+        #background_2 {
+        	z-index:2;
+        }
+        
+        #imageEditWindow>div {
+        	width:100%;
+        	display:flex;
+        	border:1px solid black;
+        	height:75%;
+        }
+        
+        #imageEditWindow>div>div {
+        	width:100%;
+        	border:1px solid brown;
+        	overflow:scroll;
+        }
+        
+        .imageBox>div {
+       		display:inline-block;
+        	width:60px;
+        	height:60px;
+        	position:relative;
+        	border:1px solid orange;
+        }
+        
+        .imageBox>div>img {
+        	height:90%;
+        	width:auto;
+        }
+        
+        .deleteX {
+        	display:inline-block;
+        	/* position:relative;
+        	left:90%;
+        	bottom:20%; */
+        	float:right;
+        }
+        
+        #propertyListBody {
+        	autoflow:scroll;
+        }
+        
+        #propertyListBody *,#propertyNameListTable *{
+        	 font-size:10px;
+        	 max-height:100px;
+        }
+        
+        #propertyListBody label:hover,.easyListOperation:hover {
+        	 color:orange;
+        	 text-decoration:underline;
+        	 font-weight:bold;
+        	 cursor:pointer;
+        }
+        
+        .disbledAction {
+        	color:gray;
+        	text-decoration:none;
+        	cursor:default;
+        }
+        
+        .disbledAction:hover {
+        	color:gray;
+        	text-decoration:none;
+        	cursor:default;
+        }
+        
+        #editChange {
+        	color:#008800;  	
+        }
+        
+        #editChange:hover {
+        	color:#00CC00;
+        	text-decoration:underline;
+        	font-weight:bold;
+        	cursor:pointer;
+        }
+        
+        #editCancel {
+        	color:#CC5500;  	
+        }
+        
+        #editCancel:hover {
+        	color:#FF7700;  
+        	text-decoration:underline;
+        	font-weight:bold;
+        	cursor:pointer;	
+        }
+        
+        #productPropertyListBox {
+        	autoflow:scroll;
+        	background-color:white;
+        	border:1px solid black;
+        }
+        
+        #propertyNameListBox {
+        	background-color:white;
+        }
+        
 	</style>
 </html>

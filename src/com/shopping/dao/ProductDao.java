@@ -19,7 +19,20 @@ public interface ProductDao {
 			@Param("productName") String productName,
 			@Param("firstDate") String firstDate,
 			@Param("lastDate") String lastDate,
-			@Param("categoryThreeId") Integer CategoryId);
+			@Param("categoryId") Integer CategoryId,
+			@Param("categoryType") String categoryType);
+	
+	/*public List<Map> getProductsByCategoryTwo(@SuppressWarnings("rawtypes") @Param("page") Page page,
+			@Param("productName") String productName,
+			@Param("firstDate") String firstDate,
+			@Param("lastDate") String lastDate,
+			@Param("categoryId") Integer CategoryId);
+	
+	public List<Map> getProductsByCategoryOne(@SuppressWarnings("rawtypes") @Param("page") Page page,
+			@Param("productName") String productName,
+			@Param("firstDate") String firstDate,
+			@Param("lastDate") String lastDate,
+			@Param("categoryId") Integer CategoryId);*/
 
 	public Integer add(Product product); // Ìí¼Ó
 
@@ -32,7 +45,8 @@ public interface ProductDao {
 			@Param("productName") String productName,
 			@Param("firstDate") String firstDate,
 			@Param("lastDate") String lastDate,
-			@Param("categoryThreeId") Integer CategoryId);
+			@Param("categoryId") Integer CategoryId,
+			@Param("categoryType") String categoryType);
 	
 	public Product getProductByProductId(BigInteger productId);
 }

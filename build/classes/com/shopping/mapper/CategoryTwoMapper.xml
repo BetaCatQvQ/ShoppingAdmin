@@ -31,6 +31,9 @@
 	<select id="getCateTwoById" resultMap="BaseResultMap">
 		SELECT * FROM categoryTwo WHERE categoryTwoId = #{categoryTwoId}
 	</select>
+	<select id="getCateTwoByIdFull" resultMap="FullResultMap">
+		SELECT * FROM categoryTwo WHERE categoryTwoId = #{categoryTwoId}
+	</select>
 	<select id="getRowsCountByPage" resultType="Integer">
 		SELECT COUNT(1) FROM categoryTwo
 	</select>
@@ -41,6 +44,13 @@
 		limit 
 		#{page.firstIndex},#{page.pageSize}
 	</select>
+	
+	<select id="SearchByCategoryOne" resultMap="BaseResultMap">
+		SELECT categoryTwo.categoryTwoId,categoryTwo.categoryTwoName FROM categoryTwo 
+		WHERE categoryTwo.categoryOneId = #{categoryOneId}
+		order by categoryTwo.categoryTwoId ASC
+	</select>
+	
 	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
 		SELECT COUNT(1) FROM categoryTwo WHERE categoryTwo.categoryTwoName like '%${categoryTwoName}%'
 	</select>

@@ -12,11 +12,15 @@ public interface CategoryTwoDao {
 	
 	public List<CategoryTwo> Search(@Param("categoryTwoName")String categoryTwoName,@Param("page") Page page);
 	
+	public List<CategoryTwo> SearchByCategoryOne(Integer categoryOneId);
+	
 	public Integer getRowsCountByPage();
 	
 	public Integer getRowsCountToPageByCategoryName(@Param("categoryTwoName")String categoryTwoName);
 	
 	public CategoryTwo getCateTwoById(@Param("categoryTwoId") Integer categoryTwoId);
+	
+	public CategoryTwo getCateTwoByIdFull(@Param("categoryTwoId") Integer categoryTwoId);
 
 	public Integer addCateTwo(@Param("categoryTwo") CategoryTwo categoryTwo);
 

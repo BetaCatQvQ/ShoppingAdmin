@@ -33,5 +33,10 @@ public class ProductImageServiceImpl implements ProductImageService {
 	public Integer deleteProductImageByProductId(BigInteger productId) {
 		return piDao.deleteProductImageByProductId(productId);
 	}
+
+	@Override
+	public Integer delete(Integer productImageId) {
+		return piDao.delete(productImageId);
+	}
 	
 }

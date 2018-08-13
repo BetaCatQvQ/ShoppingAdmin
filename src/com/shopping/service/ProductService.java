@@ -11,18 +11,15 @@ import com.shopping.entity.Product;
 
 /**
  * 
- * @author 焦明扬
- * 产品管理的业务逻辑接口
+ * @author 焦明扬 产品管理的业务逻辑接口
  *
  */
 public interface ProductService {
 	// 获取所有产品,包含模糊查询以及分页
-	public List<Map> getProducts(@SuppressWarnings("rawtypes") @Param("page") Page page,
-			/*@Param("productId") BigInteger productId,*/
-			@Param("productName") String productName,
-			@Param("firstDate") String firstDate,
-			@Param("lastDate") String lastDate,
-			@Param("categoryThreeId") Integer CategoryId);
+	public List<Map> getProducts(@SuppressWarnings("rawtypes") Page page,
+	/* ("productId") BigInteger productId, */
+	String productName, String firstDate, String lastDate, Integer CategoryId,
+			String categoryType);
 
 	public Integer add(Product product); // 添加
 
@@ -31,12 +28,13 @@ public interface ProductService {
 	public Integer delete(BigInteger productId); // 删除
 	// 获取数据总数,用于分页显示
 
-	public Integer getCount(@SuppressWarnings("rawtypes") @Param("page") Page page,
-			/*@Param("product") BigInteger productId,*/
-			@Param("productName") String productName,
-			@Param("firstDate") String firstDate,
-			@Param("lastDate") String lastDate,
-			@Param("categoryThreeId") Integer CategoryId);
-	
+	public Integer getCount(
+			@SuppressWarnings("rawtypes")Page page,
+			String productName,
+			String firstDate,
+			String lastDate,
+			Integer CategoryId,
+			String categoryType);
+
 	public Product getProductByProductId(BigInteger productId);
 }

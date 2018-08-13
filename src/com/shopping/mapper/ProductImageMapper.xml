@@ -45,4 +45,8 @@
 	<delete id = "deleteProductImageByProductId">
 		delete from productImage where productId = #{productId}
 	</delete>
+	
+	<delete id = "delete">
+		delete from productImage where productImageId = #{productImageId}
+	</delete>
 </mapper>

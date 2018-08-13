@@ -26,6 +26,11 @@ public class ProductDetailImageServiceImpl implements ProductDetailImageService 
 			BigInteger productId) {
 		return pdiDao.getProductDetailImageByProductId(productId);
 	}
+
+	@Override
+	public Integer delete(Integer productImageDetailId) {
+		return pdiDao.delete(productImageDetailId);
+	}
 	
 	
 }

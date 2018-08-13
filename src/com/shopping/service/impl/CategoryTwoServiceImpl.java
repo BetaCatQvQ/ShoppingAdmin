@@ -43,6 +43,11 @@ public class CategoryTwoServiceImpl implements CategoryTwoService{
 	public CategoryTwo getCateTwoById(Integer categoryTwoId) {
 		return ctDao.getCateTwoById(categoryTwoId);
 	}
+	
+	@Override
+	public CategoryTwo getCateTwoByIdFull(Integer categoryTwoId) {
+		return ctDao.getCateTwoByIdFull(categoryTwoId);
+	}
 
 	@Override
 	public void search(String categoryTwoName,Page page) {
@@ -51,5 +56,10 @@ public class CategoryTwoServiceImpl implements CategoryTwoService{
 		List<CategoryTwo> categoryTwos=  ctDao.Search(categoryTwoName, page);
 		page.setData(categoryTwos);
 
+	}
+
+	@Override
+	public List<CategoryTwo> SearchByCategoryOne(Integer categoryOneId) {
+		return ctDao.SearchByCategoryOne(categoryOneId);
 	}
 }

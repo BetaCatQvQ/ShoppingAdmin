@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.shopping.entity.ProductDetailImage;
 import com.shopping.service.ProductDetailImageService;
@@ -18,11 +19,17 @@ public class ProductDetailImageController {
 	ProductDetailImageService pdiService;
 	
 	@RequestMapping("/getProductDetailImagesByProductId")
+	@ResponseBody
 	public List<ProductDetailImage> getProductDetailImagesByProductId(BigInteger productId) {
 			if (productId == null) {
 				return null;
 			}
-			List<ProductDetailImage> imageList = pdiService.deleteProductDetailImageByProductId(productId)
+			List<ProductDetailImage> imageList = pdiService.getProductDetailImageByProductId(productId);
 		return imageList;
+	}
+	
+	@RequestMapping("/deleteProductDetailImage")
+	public Integer deleteProductDetailImage(Integer productImageId) {
+		return pdiService.delete(productImageId);
 	}
 }

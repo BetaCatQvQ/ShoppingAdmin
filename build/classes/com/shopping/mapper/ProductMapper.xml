@@ -24,20 +24,6 @@
 	<resultMap type="Product" id="SuperResultMap" extends="BaseResultMap">
 		<association property="categoryThree" resultMap="com.shopping.dao.CategoryThreeDao.SuperResultMap" />
 	</resultMap>	
-	
-	
-	<!-- <if test="stuName != null and stuName != ''">s
-				and stuName like concat(';%', #{stuName}, '%')
-			</if> -->
-			<!-- <if test="gradeId != null and gradeId != 0">
-				and g.gradeId=#{gradeId}
-			</if> -->
-			
-			<!-- @Param("page") Page<Product> page,
-			@Param("productId") Integer productId,
-			@Param("productName") String productName,+
-			@Param("firstDate") Date firstDate,
-			@Param("lastDate") Date lastDate); -->
 			
 	<sql id="selectCondition">
 		<where>	
@@ -47,8 +33,18 @@
 			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
 				and p.productCreateDate between #{firstDate} and #{lastDate}
 			</if>
-			<if test = "categoryThreeId != null and categoryThreeId != 0">
-				and p.categoryThreeId = #{categoryThreeId}
+			<if test = "categoryId != null and categoryId != 0">
+				<if test = "categoryType == '一级分类'">
+					and p.categoryThreeId in 
+				(SELECT ct.categoryThreeId FROM categoryThree ct WHERE ct.categoryTwoId in
+				 (SELECT ctw.categoryTwoId FROM categoryTwo ctw WHERE ctw.categoryOneId = #{categoryId}))
+				</if>
+				<if test = "categoryType == '二级分类'">
+					and p.categoryThreeId in (SELECT ct.categoryThreeId FROM categoryThree ct WHERE ct.categoryTwoId = #{categoryId})
+				</if>
+				<if test = "categoryType == '三级分类'">
+					and p.categoryThreeId = #{categoryId}
+				</if>		
 			</if>
 		</where>
 	</sql>
@@ -58,7 +54,7 @@
 	</insert>
 	
 	<update id = "update">
-		update product set productName = #{productName} where productId = #{productId}
+		update product set productName = #{productName},categoryThreeId = #{categoryThree.categoryThreeId} where productId = #{productId}
 	</update>
 	
 	<delete id= "delete">
@@ -76,7 +72,7 @@
 		limit #{page.firstIndex},#{page.pageSize}
 	</select>
 	
-	<select id = "getProductByProductId" resultMap = "FullResultMap">
+	<select id = "getProductByProductId" resultMap = "SuperResultMap">
 		select * from product where productId = #{productId} limit 1
 	</select>
 	

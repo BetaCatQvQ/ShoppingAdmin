@@ -16,5 +16,43 @@
 	<resultMap type="ProductProperty" id="SuperResultMap" extends="BaseResultMap">
 		<association property="categoryTwo" resultMap="com.shopping.dao.CategoryTwoDao.SuperResultMap" />
 	</resultMap>
-
+	
+	<insert id = "add">
+		insert into productProperty values(null,#{categoryTwo.categoryTwoId},#{productPropertyName})
+	</insert>
+	
+	<update id = "edit">
+		update productProperty set productPropertyName = #{productPropertyName},categoryTwoId = #{categoryTwo.categoryTwoId}
+		where productPropertyId = #{productPropertyId}
+	</update>
+	
+	<delete id = "delete">
+		delete from productProperty where productPropertyId = #{productPropertyId};
+	</delete>
+	
+	<select id = "list" resultMap = "FullResultMap">
+		select pp.*,ct.categoryTwoName from productProperty pp
+			<if test = "categoryTwoId != null">
+			 	INNER JOIN categoryTwo ct ON ct.categoryTwoId = pp.categoryTwoId
+			</if> 
+		<where>
+			<if test = "categoryTwoId != null" >
+				and ct.categoryTwoId = #{categoryTwoId}
+			</if>
+			group by pp.productPropertyId
+			order by pp.productPropertyId asc
+			<if test = "page != null">
+				limit #{page.firstIndex},#{page.pageSize}
+			</if>
+		</where>
+	</select>
+	
+	<select id = "listCount" resultType = "Integer">
+		select count(1) from productProperty
+		<where>
+			<if test = "categoryTwoId != null" >
+				and categoryTwoId = #{categoryTwoId}
+			</if>
+		</where>
+	</select>
 </mapper>

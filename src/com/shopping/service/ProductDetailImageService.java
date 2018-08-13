@@ -9,4 +9,6 @@ public interface ProductDetailImageService {
 	public Integer deleteProductDetailImageByProductId(BigInteger productId);
 	
 	public List<ProductDetailImage> getProductDetailImageByProductId(BigInteger productId);
+	
+	public Integer delete(Integer productImageDetailId);
 }

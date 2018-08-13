@@ -24,5 +24,9 @@
 	<select id = "getProductDetailImageByProductId" resultMap = "FullResultMap">
 		select * from productDetailImage where productId = #{productId}
 	</select>
+	
+	<delete id = "delete">
+		delete from productDetailImage where productDetailImage = #{productDetailImage}
+	</delete>
 
 </mapper>

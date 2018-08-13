@@ -37,11 +37,24 @@ public class CategoryThreeController {
 		return page;
 	}
 	
+	@RequestMapping("/listThreeByTwo")
+	@ResponseBody
+	public Object getCategoryThreeByTwo(Integer categoryTwoId) {
+		return ch.SearchByCategoryTwo(categoryTwoId);
+	}
+	
 	@RequestMapping("/getBysearch")
 	@ResponseBody
 	public Object getBysearch(String searchParams,Integer selectVal,Page<CategoryOne> page) {
 		page.setPageSize(selectVal);
 		ch.search(searchParams, page);
 		return page;
+	}
+	
+	@RequestMapping("/getCategoryThreeById")
+	@ResponseBody
+	public CategoryThree getCategoryThreeById(Integer categoryThreeId) {
+		CategoryThree cth = ch.getCateThreeById(categoryThreeId);
+		return ch.getCateThreeById(categoryThreeId);
 	}
 }

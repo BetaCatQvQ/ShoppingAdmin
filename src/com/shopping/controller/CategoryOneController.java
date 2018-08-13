@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.shopping.dao.CategoryOneDao;
 import com.shopping.entity.CategoryOne;
 import com.shopping.entity.Page;
 import com.shopping.service.CategoryOneService;
@@ -18,6 +19,9 @@ import com.shopping.service.CategoryOneService;
 public class CategoryOneController {
 	@Resource
 	private CategoryOneService co;
+	
+	@Resource 
+	private CategoryOneDao cd;
 
 	@RequestMapping("/list")
 	public String getList(Model model, Page<CategoryOne> page) {
@@ -48,6 +52,18 @@ public class CategoryOneController {
 		co.getCateOneList(page);
 		return page;
 	}
+	
+	@RequestMapping("/listOneAll")
+	@ResponseBody
+	public Object getCategoryOneAll() {
+		Page<CategoryOne> page = new Page<CategoryOne>();
+		page.setPageSize(200);
+		co.getCateOneList(page);
+		/*System.out.println("---------------listOneAll----------------");
+		System.out.println(page.getData());*/
+		return page;
+	}
+	
 	@RequestMapping("/getBysearch")
 	@ResponseBody
 	public Object getBysearch(String searchParams,Integer selectVal,Integer pageNo,Page<CategoryOne> page) {
@@ -55,5 +71,11 @@ public class CategoryOneController {
 		page.setPageNo(pageNo);
 		co.search(searchParams, page);
 		return page;
+	}
+	
+	@RequestMapping("/getCategoryOneById")
+	@ResponseBody
+	public Object getCategoryThreeById(Integer categoryOneId) {
+		return co.getCateOneById(categoryOneId);
 	}
 }

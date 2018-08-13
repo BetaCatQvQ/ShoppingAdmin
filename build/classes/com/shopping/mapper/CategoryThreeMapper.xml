@@ -36,6 +36,9 @@
 	<select id="getRowsCountByPage" resultType="Integer">
 		SELECT COUNT(1) FROM categoryThree
 	</select>
+	<select id="getCateThreeById" resultMap="FullResultMap">
+		SELECT * FROM categoryThree WHERE categoryThreeId = #{categoryThreeId}
+	</select>
 	<select id="Search" resultMap="BaseResultMap">
 		SELECT categoryThree.categoryThreeId,categoryThree.categoryThreeName FROM categoryThree 
 		HAVING categoryThreeName like '%${categoryThreeName}%'
@@ -43,6 +46,13 @@
 		limit 
 		#{page.firstIndex},#{page.pageSize}
 	</select>
+	
+	<select id="SearchByCategoryTwo" resultMap="BaseResultMap">
+		SELECT categoryThree.categoryThreeId,categoryThree.categoryThreeName FROM categoryThree 
+		WHERE categoryThree.categoryTwoId = #{categoryTwoId}
+		order by categoryThree.categoryThreeId ASC
+	</select>
+	
 	<select id="getRowsCountToPageByCategoryName" resultType="Integer">
 		SELECT COUNT(1) FROM categoryThree WHERE categoryThree.categoryThreeName like '%${categoryThreeName}%'
 	</select>
