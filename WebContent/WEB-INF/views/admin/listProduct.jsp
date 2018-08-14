@@ -103,8 +103,8 @@
 											<c:forEach items="${page.data}" var="p">
 												<tr>
 													<td>${p.productId}</td>
-													<td><img id = "productImageShow" src = "${root}/${p.productImagePath}"></td>
-													<td>${p.productName}</td>
+													<td><img class = "productImageShow" src = "${root}/${p.productImagePath}"></td>
+													<td class = "pPic">${p.productName}</td>
 													<td>${p.restQuantity}</td>
 													<td>${p.productCreateDate}</td>
 
@@ -115,7 +115,7 @@
 													<td><a><span
 															class="glyphicon glyphicon-list" onclick = "showUpdateWindow('propertyEdit','${p.productId}')"></span></a></td>
 													<td><a><span
-															class="glyphicon glyphicon-list"></span></a></td>
+															class="glyphicon glyphicon-list" onclick = "showUpdateWindow('productTypeEdit','${p.productId}')"></span></a></td>
 													<td><a><span
 															class="glyphicon glyphicon-trash" onclick = "showUpdateWindow('delete','${p.productId}')"></span></a></td>
 												</tr>
@@ -309,10 +309,61 @@
     	<input id = "firstInPPEdit" type = "hidden" value = "0" />
     </div>
     
-    <!-- 分类管理 -->
+    <!-- 产品类型管理 -->
+    
+    <div class = "jumpWindow" id = "productTypeWindow">
+    	<div id = "pt_searchBar">
+				名称搜索:<input type = "text" id = "pt_searchMessage"/>
+				价    格:<input type = "number" id = "pt_searchSalePrice_f" />-
+					 <input type = "number" id = "pt_searchSalePrice_l" />
+				库存量:<input type = "number" id = "pt_searchRestQuantity_f"/>-
+					 <input type = "number" id = "pt_searchRestQuantity_l"/>
+				
+				<input type = "hidden" id = "pt_searchMessageHidden" value = "" />
+				<input type = "hidden" id = "pt_salePriceHidden_f" value = "" />
+				<input type = "hidden" id = "pt_salePriceHidden_l" value = "" />
+				<input type = "hidden" id = "pt_restQuantityHidden_f" value = "" />
+				<input type = "hidden" id = "pt_restQuantityHidden_l" value = "" />
+				<button id = "pt_searchButton" name = "pt_searchButton" onclick = "listProductTypes()" >搜索</button>
+		</div>
+				
+ 				<button id = "pt_addButton">添加</button>
+ 				<table border="1">
+ 					<thead>
+ 						<tr>
+ 							<th>类型名称</th>
+ 							<th>类型图片</th>
+ 							<th>价格</th>
+ 							<th>优惠价格</th>
+ 							<th>库存</th>
+ 							<th>产品创建时间</th>
+ 							<th>所属产品</th>
+ 							<th colspan = "2">操作</th>
+ 						</tr>
+ 					</thead>
+ 					<tbody id = "pt_listBody">
+ 					
+ 					</tbody>
+ 				</table>
+ 				
+ 				<div id="pt_pagination">
+					<input type = "hidden" id = "pt_pageNo" value = "1" />
+					<input type = "hidden" id = "pt_pageCount" value = "0" />
+					<input type = "hidden" id = "pt_pageSize" value = "10" />
+				</div>
+				
+				<button name = "cancelButton" onclick = "cancelWindow('productTypeEdit')">关闭</button>
+ 		
+    </div>
     
 </body>
 	<style type = "text/css">
+	
+		.pPic {
+        	width:3px;
+        	height:3px;
+        }
+        
 		#productImageShow {
 			max-width:100%;
 			height:auto;
@@ -463,6 +514,23 @@
         #propertyNameListBox {
         	background-color:white;
         }
+        
+        #productTypeWindow {
+        	top: 30%; 
+            left: 20%; 
+        	width: 70%; 
+            height: 65%; 
+        }
+        
+        .pt_imageTd {
+        	width:20px;
+        	height:20px;
+        }
+        
+        .pt_imageTd img {
+        	width:95%;
+        	height:auto;
+        }    
         
 	</style>
 </html>

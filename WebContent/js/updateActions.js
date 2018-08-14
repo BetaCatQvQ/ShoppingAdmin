@@ -140,6 +140,9 @@
 //-------------------------------------------------产品属性操作-----------------------------------------------------------
 	
 	function addProductProperty() {
+		if ($("#editChange").length > 0 || $("#editCancel").length > 0) {
+			return;
+		}
 		var ctId = $("#newPropertyCategoryTwoBox").val();
 		var ppName = $("#addProductPropertyName").val();
 		$.post("../productProperty/addProductProperty.action",{
@@ -181,4 +184,90 @@
 		},"json");
 	}
 	
+//-------------------------------------------------产品类型操作-------------------------------------------------------------------
 	
+	function addProductType() {
+		if ($("#editChange").length <= 0 || $("#editCancel").length <= 0) {
+			return;
+		}
+		var pId = $("#selectedProductId").val();
+		var ptName = $("#pt_nameAddInput").val();
+		var ptImage = $("#pt_imageAddInput").val();
+		var ptPrice = $("#pt_priceAddInput").val();
+		var ptSalePrice = $("#pt_salePriceAddInput").val();
+		var ptRQuantity = $("#pt_rQuantityAddInput").val();
+		
+		var fileObj=document.getElementById("pt_imageAddInput").files[0];
+		
+		console.log(fileObj);
+		/*var imageForm = new FormData();
+		//imageForm.append("ptImageFile",$("#pt_imageAddInput").get(0).files[0]);		
+		imageForm.append("pId", pId); 
+		imageForm.append("ptName", ptName); 
+		imageForm.append("ptImage", ptImage); 
+		imageForm.append("ptPrice", ptPrice); 
+		imageForm.append("ptSalePrice", ptSalePrice); 
+		imageForm.append("ptRQuantity", ptRQuantity); 
+		imageForm.append("ptImageFile", fileObj);
+		console.log(imageForm);*/
+		var oFileReader = new FileReader();
+		var tdBase64 = null;
+        oFileReader.onload = function (e) {
+          tdBase64 = e.target.result;
+        };
+        oFileReader.readAsDataURL(fileObj);
+		$.post("../productType/addProductType.action",{
+			"pId" : pId,
+			"ptName" : ptName,
+			"ptImage" : ptImage,
+			"ptPrice" : ptPrice,
+			"ptSalePrice" : ptSalePrice,
+			"ptRQuantity" : ptRQuantity,
+			"ptImageFile" : tdBase64
+		},function(success) {
+			if (success == 1) {
+				listProductTypes();
+			}
+		},"json");
+	}
+	
+	function editProductType(ptId) {
+		var pId = $("#selectedProductId").val();
+		var ptName = $("#pt_nameAddInput").val();
+		var ptImage = $("#pt_imageAddInput").val();
+		var ptPrice = $("#pt_priceAddInput").val();
+		var ptSalePrice = $("#pt_salePriceAddInput").val();
+		var ptRQuantity = $("#pt_rQuantityAddInput").val();
+		
+		$.post("../productType/editProductType.action",{
+			"pId" : pId,
+			"ptId" : ptId,
+			"ptName" : ptName,
+			"ptImage" : ptImage,
+			"ptPrice" : ptPrice,
+			"ptSalePrice" : ptSalePrice,
+			"ptRQuantity" : ptRQuantity
+		},function(success) {
+			if (success == 1) {
+				listProductTypes();
+			}
+		},"json");
+	}
+	
+	function deleteProductType(ptId) {
+		
+		if ($("#editChange").length > 0 || $("#editCancel").length > 0) {
+			return;
+		}
+		
+		var ptImage = $("#pt"+ptId+"imageTd>img").attr("src");
+		
+		$.post("../productType/deleteProductType.action",{
+			"ptId" : ptId,
+			"ptImage" : ptImage
+		},function(success) {
+			if (success == 1) {
+				listProductTypes();
+			}
+		},"json");
+	}

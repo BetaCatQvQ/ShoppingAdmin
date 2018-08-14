@@ -26,33 +26,37 @@
 		select count(1) from productType where productId = #{id}
 	</select>
 	
-	<!-- <sql id="selectCondition">
+	<sql id="pt_searchCondition">
 		<where>
-			<if test = "productTypeName != null and productTypeName != ''">
-				and productTypeName like concat ('%',#{stuName},'%')
+			<if test = "ptF.productTypeName != null and ptF.productTypeName != ''">
+				and pt.productTypeName like concat ('%',#{ptF.productTypeName},'%')
 			</if>
-			<if test = "fSalePrice != null and fsalePrice >= 0 and lSalePrice != null lSalePrice >= fsalePrice">
-				and (salePrice between #{fSalePrice} and #{lSalePrice}) or (price between #{fSalePrice}
-				and #{lSalePrice})
+			<if test = "ptF.salePrice != null and ptL.salePrice != null">
+				and (pt.salePrice between #{ptF.salePrice} and #{ptL.salePrice}) or (pt.price between #{ptF.salePrice}
+				and #{ptL.salePrice})
 			</if>
-			<if test = "fRestQuantity != null and fRestQuantity >= 0 and lRestQuantity != null and lRestQuantity >= fRestQuantity">
-				and restQuantity between #{fRestQuantity} and #{lRestQuantity}
+			<if test = "ptF.restQuantity != null and ptL.restQuantity != null">
+				and pt.restQuantity between #{ptF.restQuantity} and #{ptL.restQuantity}
 			</if>
-			<if test = "firstDate != null and firstDate != '' and lastDate != null and lastDate != ''">
-				and productTypeCreateDate between #{firstDate} and #{lastDate}
-			</if>
-			<if test = "productId != null and productId >= 0">
-				and productId = #{productId}+
+			
+			<if test = "ptF.product.productId != null">
+				and pt.productId = #{ptF.product.productId}
 			</if>
 		</where>
-	</sql> -->
+	</sql>
 	
-	<select id = "getProductTypesByProductId" resultMap = "BaseResultMap">
-		select * from productType 
-		<!-- <include refid="searchCondition" /> -->
-		order by productId asc
+	<select id = "getProductTypesByProductId" resultType = "Map">
+		select pt.*,p.productName from productType pt
+		inner join product p on p.productId = pt.productId
+		<include refid="pt_searchCondition" />
+		order by pt.productId asc
 		
 		limit #{page.firstIndex},#{page.pageSize}
+	</select>
+	
+	<select id = "getCountByProductId" resultType = "Integer" >
+		select count(1) from productType pt
+		<include refid="pt_searchCondition" />
 	</select>
 	
 	<insert id = "addProductType">

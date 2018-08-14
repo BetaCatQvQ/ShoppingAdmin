@@ -41,6 +41,12 @@ function showUpdateWindow(windowType, productId) {
 		listProductProperties("list",$("#propertyNameListBody"));	
 		$("#firstInPPEdit").val("1");
 		break;
+	case "productTypeEdit":
+		$("#productTypeWindow").slideDown(500);
+		$("#background").show();		
+		$("#selectedProductId").val(productId);
+		listProductTypes();
+		break;
 	}
 }
 
@@ -81,7 +87,15 @@ function cancelWindow(windowType) {
 		listProductPropertyValues();
 		$("#firstInPPEdit").val("0");
 		break;
+	case "productTypeEdit":
+		$("#pt_listBody").html("");
+		$("#productTypeWindow").slideUp(500);
+		$("#background").hide();
+		$("#selectedProductId").val();
+		$("#pt_searchBar input").val("");
+		break;
 	}
+	
 }
 
 function showPIFileWindow() {
@@ -145,7 +159,7 @@ function ppEditBoxChange(ctId,ppId) {
 	$("#ppNameEditSelect").focus();
 }
 
-//产品属性分页------------------------------------
+//产品属性分页
 
 function ppBoxPageAction(action) {
 	var pageNoHidden = $("#productPropertyPageNo");
@@ -167,4 +181,95 @@ function ppBoxPageAction(action) {
 		break;
 	}
 	listProductProperties("list",$("#propertyNameListBody"));
+}
+
+//产品类型系列-------------------------------------------------------------------------------------------------
+
+function ptEditBoxChange(ptId) {
+	if (ptId == null) {
+		return null;
+	}
+	
+	if ($("#editChange").length > 0 || $("#editCancel").length > 0) {
+		return;
+	}
+	
+	var ptName = $("#pt"+ptId+"nameTd").text();
+	var ptPrice = $("#pt"+ptId+"priceTd").text();
+	var ptRQuantity = $("#pt"+ptId+"rQuantityTd").text();
+	var ptSalePrice = $("#pt"+ptId+"salePriceTd").text();
+	
+	$("#pt"+ptId+"nameTd").html("<input type='text' id = 'pt_nameEditInput' value = '"+ptName+"'/>");
+	$("#pt"+ptId+"priceTd").html("<input type = 'number' id = 'pt_priceEditInput' value = '"+ptPrice+"' />");
+	$("#pt"+ptId+"salePriceTd").html("<input type = 'number' id = 'pt_salePriceEditInput' value = '"+ptSalePrice+"' "+
+			"onchange = 'ptSalePriceControll()' />");
+	$("#pt"+ptId+"rQuantityTd").html("<input type = 'number' id = 'pt_rQuantityInput' value = '"+ptRQuantity+"' />");
+	
+	$("#pt_listBody label").addClass("disbledAction");
+	
+	$("#pt"+ptId+"edit").html("<label id = 'editChange' onclick = 'editProductType(ptId)' >Edit</label>");
+	$("#pt"+ptId+"delete").html("<label id = 'editCancel' onclick = ' listProductTypes()' >Cancel</label>");
+	
+	/*getCategoryTwoList("ppIdEdit");*/
+	$("#pt_nameEditInput").focus();
+}
+
+function ptAddBoxChange(pId) {
+	
+	if (pId == null) {
+		return;
+	}
+	var htmls = "<tr><td><input type='text' id = 'pt_nameAddInput'/></td>"+
+				"<td class = 'pt_imageTd'><button id = 'pt_imageAddButton' onclick = ptSelectFile('add')>选择图片</button>"+
+				"<form id = 'pt_imageAddInputForm' name = 'pt_imageAddInputForm' enctype='multipart/form-data'><input id = 'pt_imageAddInput' type = 'file' style = 'display:none;' /></form>"+
+				"<td><input type='number' id = 'pt_priceAddInput' name = 'pt_priceAddInput' value = '0'/></td>"+
+				"<td><input type='number' id = 'pt_salePriceAddInput' name = 'pt_salePriceAddInput' value = '0'/></td>"+
+				"<td><input type='number' id = 'pt_rQuantityAddInput' name = 'pt_rQuantityAddInput' value = '0'/></td>"+
+ 				"<td></td>"+
+ 				"<td><label id = 'editChange' onclick = addProductType() >Add</label></td>"+
+ 				"<td><label id = 'editCancel' onclick = listProductTypes() >Cancel</label></td></tr>";
+	
+	$("#pt_listBody").append(htmls);
+	$("#pt_listBody label").addClass("disbledAction");
+	
+	/*getCategoryTwoList("ppIdEdit");*/
+	$("#pt_nameAddInput").focus();
+}
+
+function ptSalePriceControll() {
+	var ptPrice = parseFloat($("#pt_priceEditInput").val());
+	var ptSalePrice = parseFloat($("#pt_salePriceEditInput").val());
+	if (ptSalePrice > ptPrice) {
+		$("#pt_salePriceEditInput").val(ptPrice);
+	}
+}
+
+//展开图片选择
+function ptSelectFile(type) {
+	if (type == "add") {
+		$("#pt_imageAddInput").click();
+	}
+}
+//产品类型分页
+
+function ptBoxPageAction(action) {
+	var pageNoHidden = $("#pt_PageNo");
+	var pageCount = $("#pt_PageCount").val();
+	switch(action) {
+	case "goBack":
+		var pageNo = parseInt(pageNoHidden.val());
+		if (pageNo <= 1) {
+			break;
+		}
+		pageNoHidden.val(pageNo-1);
+		break;
+	case "goFore":
+		var pageNo = parseInt(pageNoHidden.val());
+		if (pageNo >= pageCount) {
+			break;
+		}
+		pageNoHidden.val(pageNo+1);
+		break;
+	}
+	listProductTypes();
 }

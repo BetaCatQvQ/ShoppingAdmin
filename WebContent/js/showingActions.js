@@ -104,7 +104,7 @@
 													var imageHtml = "无";
 													
 													if (p.productImagePath != '' && p.productImagePath != null) {
-														imageHtml = "<img src = '"+root+"/"
+														imageHtml = "<img class = 'productImageShow' src = '"+root+"/"
 															+ p.productImagePath
 															+ "'  />"
 													}
@@ -112,7 +112,7 @@
 													var showList = "<tr><td>"
 															+ p.productId
 															+ "</td>"
-															+ "<td>"
+															+ "<td class = 'pPic'>"
 															+ imageHtml
 															+ "<td>"
 															+ p.productName
@@ -125,10 +125,11 @@
 															+ "<td><a><span class='glyphicon glyphicon-edit' onclick = showUpdateWindow('edit','"
 															+ p.productId
 															+ "')></span></a></td>"
-															+ "<td><a><span class='glyphicon glyphicon-pcture'  onclick = showUpdateWindow('imageEdit','"
+															+ "<td><a><span class='glyphicon glyphicon-picture'  onclick = showUpdateWindow('imageEdit','"
 															+ p.productId
 															+ "')></span></a></td>"
-															+ "<td><a><span class='glyphicon glyphicon-list'></span></a></td>"
+															+ "<td><a><span class='glyphicon glyphicon-list' onclick = showUpdateWindow('propertyEdit','"+p.productId+"')></span></a></td>"
+															+ "<td><a><span class='glyphicon glyphicon-list' onclick = showUpdateWindow('productTypeEdit','"+p.productId+"')></span></a></td>"
 															+ "<td><a><span class='glyphicon glyphicon-trash' onclick = showUpdateWindow('delete','"+p.productId+"')></span></a></td>";
 															
 															//console.log(showList);
@@ -401,7 +402,6 @@
 	}
 
 	
-	
 	//显示商品属性值
 	function listProductPropertyValues() {
 		var productId = $("#selectedProductId").val();
@@ -428,21 +428,48 @@
 	
 //-----------------------------------------------商品属性名系列----------------------------------------------------
 	
-//-----------------------------------------------二级分类系列----------------------------------------------------
+//-----------------------------------------------产品类型系列----------------------------------------------------
 	
-	/*function listCategoryTwo(box) {
-		var categoryOneId = "m_categoryOneId";
+	//显示产品类型
+	function listProductTypes() {
+		var pId = $("#selectedProductId").val();
+		var ptName = $("#pt_searchMessage").val();
+		var ptSalePriceF = $("#pt_searchSalePrice_f").val();
+		var ptSalePriceL = $("#pt_searchSalePrice_l").val();
+		var ptRestQuantityF = $("#pt_searchRestQuantity_f").val();
+		var ptRestQuantityL = $("#pt_searchRestQuantity_l").val();
+		var pageNo = $("#pt_pageNo").val();
+		var pageSize = $("#pt_pageSize").val();
 		
-		$.ajaxSettings.async = false;
-		$.post("../categoryTwo/listTwoByOne",{
-			"categoryOneId" : categoryOneId
-		},function(cateTwos) {
-			box.html("");
-			if (cateTwos != null) {
-				$.each(cateTwos,function(index,ct) {
-					var htmls = "<option value = '"+ct.categoryTwoId+"'>"+ct.categoryTwoName+"</option>";
-					box.append(htmls);
-				});
-			}
-		},"json")
-	}*/
+		var root = $("#root").val();
+		
+		$.post("../productType/listTypesByPage.action",{
+			"pId" : pId,
+			"ptName" : ptName,
+			"ptSalePriceF" : ptSalePriceF,
+			"ptSalePriceL" : ptSalePriceL,
+			"ptQuantityF" : ptRestQuantityF,
+			"ptQuantityL" : ptRestQuantityL,
+			"pageNo" : pageNo,
+			"pageSize" : pageSize
+		},function(ptList){
+			if (ptList != null) {
+				$("#pt_addButton").attr("onclick","ptAddBoxChange("+pId+")");
+				$("#pt_listBody").html("");
+				$.each(ptList.data,function(index,pt) {
+					console.log(pt.productTypeImagePath);
+					var ptId = pt.productTypeId;
+					var htmls = "<tr><td id = '#pt"+ptId+"nameTd'>"+pt.productTypeName+"</td>"+
+							"<td class = 'pt_imageTd' id = 'pt"+ptId+"imageTd'><img src = '"+root+"/"+pt.productTypeImagePath+"'/></td>"+
+							"<td id = 'pt"+ptId+"priceTd'>"+pt.price+"</td>"+
+ 							"<td id = 'pt"+ptId+"salePriceTd'>"+pt.salePrice+"</td><td id = 'pt"+ptId+"rQuantityTd'>"+pt.restQuantity+"</td><td>"+pt.productTypeCreateDate+"</td>"+
+ 							"<td>"+pt.productName+"</td>"+
+ 							"<td class = 'easyListOperation'><label onclick = 'ptEditBoxChange("+ptId+")'>Edit</label></td>"+
+ 							"<td class = 'easyListOperation'><label onclick = 'deleteProductType("+ptId+")'>Delete</label></tr>";
+					$("#pt_listBody").append(htmls);
+				})
+			}		
+		},"json");
+	}
+	
+	
