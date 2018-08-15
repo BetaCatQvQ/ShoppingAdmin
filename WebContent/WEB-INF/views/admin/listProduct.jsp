@@ -359,7 +359,7 @@
 				<input type = "hidden" id = "pt_salePriceHidden_l" value = "" />
 				<input type = "hidden" id = "pt_restQuantityHidden_f" value = "" />
 				<input type = "hidden" id = "pt_restQuantityHidden_l" value = "" />
-				<button id = "pt_searchButton" name = "pt_searchButton" onclick = "listProductTypes()" >搜索</button>
+				<button id = "pt_searchButton" name = "pt_searchButton" onclick = "searchProductTypes()" >搜索</button>
 		</div>
 				
  				<button id = "pt_addButton">添加</button>
@@ -569,8 +569,8 @@
         }
         
         .pt_imageTd {
-        	width:20px;
-        	height:20px;
+        	width:40px;
+        	height:40px;
         }
         
         .pt_imageTd img {
@@ -615,6 +615,21 @@
         #imageEditWindow #saveImagesManager {
         	text-align:center;
         }
+        
+        #pt_imageAddButton {
+        	display:inline-block;
+        	width:80px;
+        	font-size:10px;
+        	vertical-align:middle;
+        }
+        
+        #pt_listBody tr {
+        	max-height:20px;
+        }
+        
+        #pt_imageTd {
+        	max-height:40px;
+        } 
         
 	</style>
 </html>

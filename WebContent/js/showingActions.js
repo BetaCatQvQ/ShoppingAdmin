@@ -388,8 +388,8 @@
 											var ctId = pp.categoryTwo.categoryTwoId;
 											var htmls = "<tr><td id = '"+ppId+"_ppNameInputTd'>"+pp.productPropertyName+"</td>"+
 											"<td id = '"+ppId+"_ctNameTd'>"+pp.categoryTwo.categoryTwoName+"</td>"+
-											"<td id = '"+ppId+"_editPP'><label class = 'easyListOperation' onclick=ppEditBoxChange('"+ctId+"','"+ppId+"') >Edit</label></td>"+
-											"<td id = '"+ppId+"_deletePP'><label class = 'easyListOperation' onclick=deleteProductProperty('"+ppId+"')>Delete</label></td></tr>";
+											"<td id = '"+ppId+"_editPP' class = 'easyListOperation'><label class = 'easyListOperation' onclick=ppEditBoxChange('"+ctId+"','"+ppId+"') >Edit</label></td>"+
+											"<td id = '"+ppId+"_deletePP' class = 'easyListOperation'><label class = 'easyListOperation' onclick=deleteProductProperty('"+ppId+"')>Delete</label></td></tr>";
 											
 											box.append(htmls);
 										});
@@ -445,11 +445,11 @@
 	//显示产品类型
 	function listProductTypes() {
 		var pId = $("#selectedProductId").val();
-		var ptName = $("#pt_searchMessage").val();
-		var ptSalePriceF = $("#pt_searchSalePrice_f").val();
-		var ptSalePriceL = $("#pt_searchSalePrice_l").val();
-		var ptRestQuantityF = $("#pt_searchRestQuantity_f").val();
-		var ptRestQuantityL = $("#pt_searchRestQuantity_l").val();
+		var ptName = $("#pt_searchMessageHidden").val();
+		var ptSalePriceF = $("#pt_salePriceHidden_f").val();
+		var ptSalePriceL = $("#pt_salePriceHidden_l").val();
+		var ptRestQuantityF = $("#pt_restQuantityHidden_f").val();
+		var ptRestQuantityL = $("#pt_restQuantityHidden_l").val();
 		var pageNo = $("#pt_pageNo").val();
 		var pageSize = $("#pt_pageSize").val();
 		

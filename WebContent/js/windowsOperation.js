@@ -228,6 +228,7 @@ function ptAddBoxChange(pId) {
 				"<td><input type='number' id = 'pt_salePriceAddInput' name = 'pt_salePriceAddInput' value = '0'/></td>"+
 				"<td><input type='number' id = 'pt_rQuantityAddInput' name = 'pt_rQuantityAddInput' value = '0'/></td>"+
  				"<td></td>"+
+ 				"<td></td>"+
  				"<td><label id = 'editChange' onclick = addProductType() >Add</label></td>"+
  				"<td><label id = 'editCancel' onclick = listProductTypes() >Cancel</label></td></tr>";
 	
@@ -289,6 +290,16 @@ function ptBoxPageAction(action) {
 			}
 			break;
 	}
+	
+	listProductTypes();
+}
+
+function searchProductTypes() {
+	$("#pt_searchMessageHidden").val($("#pt_searchMessage").val());
+	$("#pt_pt_salePriceHidden_f").val($("#pt_searchSalePrice_f").val());
+	$("#pt_salePriceHidden_l").val($("#pt_searchSalePrice_l").val());
+	$("#pt_restQuantityHidden_f").val($("#pt_searchRestQuantity_f").val());
+	$("#pt_restQuantityHidden_l").val($("#pt_searchRestQuantity_l").val());
 	
 	listProductTypes();
 }
