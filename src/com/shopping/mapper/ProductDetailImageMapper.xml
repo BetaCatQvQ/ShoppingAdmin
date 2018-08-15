@@ -26,7 +26,11 @@
 	</select>
 	
 	<delete id = "delete">
-		delete from productDetailImage where productDetailImage = #{productDetailImage}
+		delete from productDetailImage where productDetailImageId = #{productDetailImageId}
 	</delete>
+	
+	<insert id = "add">
+		insert into productDetailImage values(null,#{product.productId},#{productDetailImagePath})
+	</insert>
 
 </mapper>

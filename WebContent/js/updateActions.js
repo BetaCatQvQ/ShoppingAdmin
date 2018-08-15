@@ -33,9 +33,10 @@
 		},"json");
 	}
 	
-	function deleteProductImage(productImageId) {
+	function deleteProductImage(productImageId,piPath) {
 		$.post("../productImage/deleteProductImage.action",{
-				"productImageId":productImageId
+				"productImageId":productImageId,
+				"imagePath":piPath
 		},function(data) {
 			if (data == 1) {
 				searchProductImages();
@@ -43,9 +44,10 @@
 		});
 	}
 	
-	function deleteProductDetailImage(productDetailImageId) {
+	function deleteProductDetailImage(productDetailImageId,pdiPath) {
 		$.post("../productDetailImage/deleteProductDetailImage.action",{
-				"productDetailImageId":productDetailImageId
+				"productDetailImageId":productDetailImageId,
+				"imagePath" : pdiPath
 		},function(data) {
 			if (data == 1) {
 				searchProductDetailImages();
@@ -56,33 +58,61 @@
 	function addProductImage() {
 		var selectedProductId = $("#selectedProductId").val();
 		var url = "../productImage/addProductImage.action";
+		var selectFiles = document.getElementById("pi_addFile").files;
 		
-		var fileObj = $("#btn_addProductImage_file").files[0]; // js 获取文件对象
-	    if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
-	        alert("请选择图片");
-	        return;
-	    }
-	    var formFile = new FormData();
-	    /*formFile.append("action", "../images");*/  
-	    formFile.append("productId", selectedProductId);
-	    formFile.append("imageFile", fileObj);
-	    
-	    $.post(url,formFile,function(row){
-	    	if (row != 1) {
-	    		return;
-	    	}
-	    	searchProductImages();
-	    },"json");
+		if (selectFiles == null) {
+			return;
+		}
+		$.each(selectFiles,function(index,image) {
+			if (image != null) {
+				var oFileReader = new FileReader();
+		    	var tdBase64 = null;
+			    	oFileReader.onload = function (e) {
+			        	tdBase64 = e.target.result;     
+			            $.ajaxSettings.async = false;
+			    		$.post("../productImage/addProductImage.action",{
+			    			"pId" : selectedProductId,
+			    			"imageFile" : tdBase64
+			    		},function(success) {
+			    			if (success == 1) {
+			    				searchProductImages();
+			    			}
+			    		},"json");
+			         };
+			         oFileReader.readAsDataURL(image);
+			}
+		});
+		//searchProductImages();
 		
-		console.log(path);
 	}
 	
 	function addProductDetailImage() {
 		var selectedProductId = $("#selectedProductId").val();
-		var path = $("btn_addProductDetailImage_file").val();
-		var url = "../productImage/addProductDetailImage.action";
+		var url = "../productDetailImage/addProductDetailImage.action";
+		var selectFiles = document.getElementById("pdi_addFile").files;
 		
-		console.log(path);
+		if (selectFiles == null) {
+			return;
+		}
+		$.each(selectFiles,function(index,image) {
+			if (image != null) {
+				var oFileReader = new FileReader();
+		    	var tdBase64 = null;
+			    	oFileReader.onload = function (e) {
+			        	tdBase64 = e.target.result;     
+			            $.ajaxSettings.async = false;
+			    		$.post("../productDetailImage/addProductDetailImage.action",{
+			    			"pId" : selectedProductId,
+			    			"imageFile" : tdBase64
+			    		},function(success) {
+			    			if (success == 1) {
+			    				searchProductDetailImages();
+			    			}
+			    		},"json");
+			         };
+			         oFileReader.readAsDataURL(image);
+			}
+		});
 	}
 	
 //-------------------------------------------------产品属性值操作-----------------------------------------------------------
@@ -200,67 +230,107 @@
 		var fileObj=document.getElementById("pt_imageAddInput").files[0];
 		
 		console.log(fileObj);
-		/*var imageForm = new FormData();
-		//imageForm.append("ptImageFile",$("#pt_imageAddInput").get(0).files[0]);		
-		imageForm.append("pId", pId); 
-		imageForm.append("ptName", ptName); 
-		imageForm.append("ptImage", ptImage); 
-		imageForm.append("ptPrice", ptPrice); 
-		imageForm.append("ptSalePrice", ptSalePrice); 
-		imageForm.append("ptRQuantity", ptRQuantity); 
-		imageForm.append("ptImageFile", fileObj);
-		console.log(imageForm);*/
-		var oFileReader = new FileReader();
-		var tdBase64 = null;
-        oFileReader.onload = function (e) {
-          tdBase64 = e.target.result;
-        };
-        oFileReader.readAsDataURL(fileObj);
-		$.post("../productType/addProductType.action",{
-			"pId" : pId,
-			"ptName" : ptName,
-			"ptImage" : ptImage,
-			"ptPrice" : ptPrice,
-			"ptSalePrice" : ptSalePrice,
-			"ptRQuantity" : ptRQuantity,
-			"ptImageFile" : tdBase64
-		},function(success) {
-			if (success == 1) {
-				listProductTypes();
-			}
-		},"json");
+		        
+        var oFileReader = new FileReader();
+    	var tdBase64 = null;
+    	if (fileObj != null) {
+	        oFileReader.onload = function (e) {
+	        	tdBase64 = e.target.result;     
+	            console.log("tdBase641:"+tdBase64);
+	            console.log("typeOfTdBase:"+typeof(tdBase64));
+	            $.ajaxSettings.async = false;
+	    		$.post("../productType/addProductType.action",{
+	    			"pId" : pId,
+	    			"ptName" : ptName,
+	    			"ptImage" : ptImage,
+	    			"ptPrice" : ptPrice,
+	    			"ptSalePrice" : ptSalePrice,
+	    			"ptRQuantity" : ptRQuantity,
+	    			"ptImageFile" : tdBase64
+	    		},function(success) {
+	    			if (success == 1) {
+	    				listProductTypes();
+	    			}
+	    		},"json");
+	         };
+	         oFileReader.readAsDataURL(fileObj);
+         } else {
+        	 $.ajaxSettings.async = false;
+	    		$.post("../productType/addProductType.action",{
+	    			"pId" : pId,
+	    			"ptName" : ptName,
+	    			"ptImage" : ptImage,
+	    			"ptPrice" : ptPrice,
+	    			"ptSalePrice" : ptSalePrice,
+	    			"ptRQuantity" : ptRQuantity,
+	    			"ptImageFile" : null
+	    		},function(success) {
+	    			if (success == 1) {
+	    				listProductTypes();
+	    			}
+	    		},"json");
+         }
+        
+        console.log("tdBase642:"+tdBase64);
+        
 	}
 	
-	function editProductType(ptId) {
+	function editProductType(ptId,ptImage) {
 		var pId = $("#selectedProductId").val();
-		var ptName = $("#pt_nameAddInput").val();
-		var ptImage = $("#pt_imageAddInput").val();
-		var ptPrice = $("#pt_priceAddInput").val();
-		var ptSalePrice = $("#pt_salePriceAddInput").val();
-		var ptRQuantity = $("#pt_rQuantityAddInput").val();
+		var ptName = $("#pt_nameEditInput").val();
+		var ptPrice = $("#pt_priceEditInput").val();
+		var ptSalePrice = $("#pt_salePriceEditInput").val();
+		var ptRQuantity = $("#pt_rQuantityEditInput").val();
 		
-		$.post("../productType/editProductType.action",{
-			"pId" : pId,
-			"ptId" : ptId,
-			"ptName" : ptName,
-			"ptImage" : ptImage,
-			"ptPrice" : ptPrice,
-			"ptSalePrice" : ptSalePrice,
-			"ptRQuantity" : ptRQuantity
-		},function(success) {
-			if (success == 1) {
-				listProductTypes();
-			}
-		},"json");
+		var imageFile=document.getElementById("pt_imageEditInput").files[0];
+		console.log("imageFile:"+imageFile);
+		
+		var fr = new FileReader();
+		var tdBase64 = null;
+		if (imageFile != null) {
+			fr.onload = function(e) {
+				tdBase64 = e.target.result;
+				$.ajaxSettings.async = false;
+				$.post("../productType/editProductType.action",{
+					"pId" : pId,
+					"ptId" : ptId,
+					"ptName" : ptName,
+					"ptPrice" : ptPrice,
+					"ptSalePrice" : ptSalePrice,
+					"ptRQuantity" : ptRQuantity,
+					"ptImageFile" : tdBase64,
+					"ptImage" : ptImage
+				},function(success) {
+					if (success == 1) {
+						listProductTypes();
+					}
+				},"json");
+			};
+       	 fr.readAsDataURL(imageFile);
+		} else {
+			$.ajaxSettings.async = false;
+			$.post("../productType/editProductType.action",{
+				"pId" : pId,
+				"ptId" : ptId,
+				"ptName" : ptName,
+				"ptPrice" : ptPrice,
+				"ptSalePrice" : ptSalePrice,
+				"ptRQuantity" : ptRQuantity,
+				"ptImageFile" : tdBase64,
+				"ptImage" : null
+			},function(success) {
+				if (success == 1) {
+					listProductTypes();
+				}
+			},"json");
+		}
 	}
 	
-	function deleteProductType(ptId) {
+	function deleteProductType(ptId,ptImage) {
 		
 		if ($("#editChange").length > 0 || $("#editCancel").length > 0) {
 			return;
 		}
-		
-		var ptImage = $("#pt"+ptId+"imageTd>img").attr("src");
 		
 		$.post("../productType/deleteProductType.action",{
 			"ptId" : ptId,
@@ -271,3 +341,4 @@
 			}
 		},"json");
 	}
+	

@@ -15,6 +15,7 @@ import com.shopping.entity.Page;
 import com.shopping.entity.Product;
 import com.shopping.entity.ProductType;
 import com.shopping.service.ProductTypeService;
+import com.shopping.util.CommonTools;
 import com.shopping.util.ImageUtil;
 import com.shopping.util.SnowFlake;
 import com.shopping.util.ValTool;
@@ -56,66 +57,89 @@ public class ProductTypeController {
 	
 	@RequestMapping("/editProductType.action")
 	@ResponseBody
-	public Integer editProductType(BigInteger ptId,String ptImage) {
-		if (ptId == null) {
+	public Integer editProductType(BigInteger pId,BigInteger ptId,String ptName,Float ptPrice,
+			Float ptSalePrice,Integer ptRQuantity,String ptImageFile,String ptImage) {
+		if (pId == null || ptId == null || ptName == null || ptPrice == null || ptSalePrice == null ||
+				ptRQuantity == null) {
 			return 0;
 		}
-		return pts.deleteProductType(ptId,ptImage);
+		
+		String relativePath = "";
+		if (ptImage != null && !(ptImage.equals(""))) {
+			relativePath = ptImage;
+		}
+		if (ptImageFile != null && !(ptImageFile.equals(""))) {
+			ImageUtil imageUtil = new ImageUtil(ptImageFile);
+			
+			String contentPath = ValTool.REAL_PATH;
+			String suffix = imageUtil.getSuffix();
+			
+			System.out.println("contentPath:"+contentPath+"suffix:"+suffix);
+			String newFileName = SnowFlake.getId() + "." + suffix;
+			String rootPath = ValTool.CONTEXT_PATH;
+			relativePath = "/images/productTypeImage/" + newFileName;
+			String fullPath = rootPath + relativePath;
+			
+			System.out.println(ValTool.PROJECT_PATH+relativePath);
+			imageUtil.writeImage(ValTool.PROJECT_PATH+relativePath);
+			imageUtil.writeImage(contentPath+relativePath);
+			
+			if (ptImage != null && !(ptImage.equals(""))) {
+				
+				if (CommonTools.deleteFile(ValTool.REAL_PATH+ptImage) == false) {
+					return 0;
+				}
+			}
+		}
+				
+		ProductType pt = new ProductType();
+		Product p = new Product();
+		p.setProductId(pId);
+		pt.setProduct(p);
+		pt.setProductTypeId(ptId);
+		pt.setProductTypeName(ptName);
+		pt.setProductTypeImagePath(relativePath);
+		pt.setPrice(ptPrice);
+		pt.setSalePrice(ptSalePrice);
+		pt.setRestQuantity(ptRQuantity);
+		
+		return pts.updateProductType(pt);
 	}
 	
 	@RequestMapping("/addProductType.action")
 	@ResponseBody
 	public Integer addProductType(BigInteger pId,String ptName,String ptImage,Float ptPrice,
 			Float ptSalePrice,Integer ptRQuantity,String ptImageFile) throws IllegalStateException, IOException {
+		System.out.println("ptImageFile:"+ptImageFile);
 		if (pId == null || ptName == null || ptPrice == null || ptSalePrice == null ||
-				ptRQuantity == null || ptImageFile == null) {
+				ptRQuantity == null) {
 			return 0;
 		}
-		System.out.println(ptImageFile);
 		
-		if (ptImage == null) {
-			ptImage = "";
+		String relativePath = "";
+		if (ptImageFile != null && !(ptImageFile.equals(""))) {
+			ImageUtil imageUtil = new ImageUtil(ptImageFile);
+			
+			String contentPath = ValTool.REAL_PATH;
+			String suffix = imageUtil.getSuffix();
+			
+			System.out.println(contentPath);
+			String newFileName = SnowFlake.getId() + "." + suffix;
+			String rootPath = ValTool.CONTEXT_PATH;
+			relativePath = "/images/productTypeImage/" + newFileName;
+			String fullPath = rootPath + relativePath;
+			
+			System.out.println(ValTool.PROJECT_PATH+relativePath);
+			imageUtil.writeImage(ValTool.PROJECT_PATH+relativePath);
+			imageUtil.writeImage(contentPath+relativePath);
 		}
-		ImageUtil imageUtil = new ImageUtil(ptImageFile);
-		
-		String suffix = null;
-		String contentPath = null;
-		if(ptImageFile != null){
-			suffix = imageUtil.getSuffix();
-			System.out.println(ptImageFile);
-		}
-		
-		System.out.println(suffix);
-		//根据原来的文件名，获取出文件的后缀 
-		
-		System.out.println(contentPath);
-		//根据UUID，生成新的文件名，记得加上后缀
-		String newFileName = SnowFlake.getId() + "." + suffix;
-		//获得网站运行的根目录
-		String rootPath = ValTool.CONTEXT_PATH;
-		//相对路径，用于保存到数据库，以后可以从数据库读出来，用图片显示在页面
-		//    /ptImageFiles/3b4d3f722055494b88a0a0c14e60ef05.jpg
-		String relativePath = "/images/productTypeImage/" + newFileName;
-		//完成路径
-		String fullPath = rootPath + relativePath;
-		
-		imageUtil.writeImage(fullPath);
-		
-		
-		System.out.println("------rootPath-----" + rootPath);
-		System.out.println("------relativePath-----" + relativePath);
-		System.out.println("------fullPath-----");
-		
-		File destFile = new File(fullPath);
-		
-/*		FileUtils.copyFile(srcFile, destFile);*/
 		
 		ProductType pt = new ProductType();
 		Product p = new Product();
 		p.setProductId(pId);
 		pt.setProduct(p);
 		pt.setProductTypeName(ptName);
-		pt.setProductTypeImagePath(fullPath);
+		pt.setProductTypeImagePath(relativePath);
 		pt.setPrice(ptPrice);
 		pt.setSalePrice(ptSalePrice);
 		pt.setRestQuantity(ptRQuantity);

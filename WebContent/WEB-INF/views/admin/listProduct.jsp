@@ -246,21 +246,47 @@
     	<label class = "jumpWindow-closeButton" style="position: absolute;top:2px;left: 95%;font-size: 25px;" onclick = "cancelWindow('imageEdit')">x</label>
     		<div id = "imageManagerLeftBox">
     			<label>产品图片</label>
+    			<input type = "file" id = "pi_addFile" style = "display:none;" onchange = "addProductImage()" />
+    			<button name = "pi_addButton" id = "pi_addButton" onclick = "showPIFileWindow()">添加图片</button>
+    			<!-- <button name = "pi_refresh" onclick = "searchProductImages()" >刷新</button> -->
 	    		<div id = "productImageBoxDiv" class = "imageBox" >
+	    			<table border = "1" class = "imgEditTable">
+	    				<thead style = "background-color:#ddffdd">
+	    					<tr>
+	    						<td class = "imgTd">图片</td>
+	    						<td></td>
+	    						<td colspan = "2">操作</td>
+	    					</tr>
+	    				</thead>
+	    				<tbody id = "pi_listBody">
+	    					
+	    				</tbody>
+	    			</table>
 	    		</div>	
     		</div>
-    		<input type = "file" id = "btn_addProductImage_file" style = "display:none;" />
-    		<button name = "addImageButton" id = "addImageButton" onclick = "showPIFileWindow()">添加图片</button>
+    		
     		<div id = "imageManagerRightBox">
     			<label>详情图片</label>
-	    		<div id = "productDetailImageBoxDiv" class = "imageBox" >
+    			<input type = "file" id = "pdi_addFile" style = "display:none;" onchange = "addProductDetailImage()" />
+    		<button name = "pdi_addButton" id = "pdi_addButton" onclick = "showPDIFileWindow()">添加详情图</button>
+	    		<div id = "productImageDetailBoxDiv" class = "imageBox" >
+	    			<table border = "1" class = "imgEditTable">
+	    				<thead style = "background-color:#ddffdd">
+	    					<tr>
+	    						<td class = "imgTd">图片</td>
+	    						<td></td>
+	    						<td colspan = "2">操作</td>
+	    					</tr>
+	    				</thead>
+	    				<tbody id = "pdi_listBody">
+	    					
+	    				</tbody>
+	    			</table>
 	    		</div>	
-    		</div>
-    		<input type = "file" id = "btn_addProductDetailImage_file" style = "display:none;" onclick = "showPDIFileWindow()"/>
-    		<button name = "addDetailImageButton" id = "addDetailImageButton" >添加详情图</button>
-    		<button name = "saveImagesManager" id = "saveImagesManager">保存</button>
-    		<button name = "cancelButton">取消</button>
-    </div>				
+	    	</div>	
+    </div>
+    		<button name = "saveImagesManager" id = "saveImagesManager">关闭</button>
+			
     
     <!-- 属性管理 -->
     
@@ -347,9 +373,24 @@
  				</table>
  				
  				<div id="pt_pagination">
-					<input type = "hidden" id = "pt_pageNo" value = "1" />
-					<input type = "hidden" id = "pt_pageCount" value = "0" />
-					<input type = "hidden" id = "pt_pageSize" value = "10" />
+ 					<table border = "1">
+ 						<tbody>
+ 							<tr>
+ 								<td><button id = "pt_firstPage">首页</button></td>
+ 								<td><button id = "pt_backPage">上一页</button></td>
+ 								<td><label id = "pt_pageNoLabel">1</label><label>/</label><label id = "pt_pageCountLabel">1</label></td>
+ 								<td><button id = "pt_nextPage">下一页</button></td>
+ 								<td><button id = "pt_lastPagePage">尾页</button></td>
+ 								<td class = "space"></td>
+ 								<td>跳转至:</td>
+ 								<td><input type = "text" id = "pt_turnPageInput" value = "1"/></td>
+ 								<td><button id = "pt_jumpPage">跳转</button></td>
+ 							</tr>
+ 						</tbody>
+ 					</table>
+						<input type = "hidden" id = "pt_pageNo" value = "1" />
+						<input type = "hidden" id = "pt_pageCount" value = "0" />
+						<input type = "hidden" id = "pt_pageSize" value = "10" />
 				</div>
 				
 				<button name = "cancelButton" onclick = "cancelWindow('productTypeEdit')">关闭</button>
@@ -421,7 +462,7 @@
         	z-index:2;
         }
         
-        #imageEditWindow>div {
+        /* #imageEditWindow>div {
         	width:100%;
         	display:flex;
         	border:1px solid black;
@@ -432,19 +473,11 @@
         	width:100%;
         	border:1px solid brown;
         	overflow:scroll;
-        }
+        } */
         
-        .imageBox>div {
-       		display:inline-block;
-        	width:60px;
-        	height:60px;
-        	position:relative;
-        	border:1px solid orange;
-        }
-        
-        .imageBox>div>img {
-        	height:90%;
-        	width:auto;
+        .piImg {
+        	width:100%;
+        	height:auto;
         }
         
         .deleteX {
@@ -464,7 +497,7 @@
         	 max-height:100px;
         }
         
-        #propertyListBody label:hover,.easyListOperation:hover {
+        #propertyListBody label:hover,.easyListOperation label:hover {
         	 color:orange;
         	 text-decoration:underline;
         	 font-weight:bold;
@@ -530,7 +563,41 @@
         .pt_imageTd img {
         	width:95%;
         	height:auto;
-        }    
+        }
+        
+        #pt_addTr td {
+        	height:30px;
+        	max-height:30px;
+        }
+        
+        #pt_addTr input {
+        	display:inline-block;
+        	padding:0px;
+        	line-height:0px;
+        }
+        
+        .pt_row td {
+        	height:30px;
+        	max-height:30px;
+        }
+        
+        .imgEditTable {
+        	width:100%;
+        }
+        
+        .imgEditTable td {
+        	text-align:center;
+        	vertical-align: middle;
+        }
+        
+        .imgEditTable .imgTd {
+        	width:60px;
+        	height:60px;
+        }
+        
+        .img_controll {
+        	width:30px;
+        }
         
 	</style>
 </html>

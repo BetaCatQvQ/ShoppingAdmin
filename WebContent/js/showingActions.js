@@ -148,6 +148,8 @@
 						},"json");
 	}
 	
+//商品图片系列-------------------------------------------------------------------------------------------------
+	
 	function searchProductImages() {
 		var root = $("#root").val();
 		var url = "../productImage/getProductImagesByProductId.action";
@@ -156,11 +158,16 @@
 		$.post(url,{
 			"productId" : productId
 		},function(data) {
+			$("#pi_listBody").html("");
 			jQuery.each(data,function(i,pi) {
-				var htmls = "<div><img src = '"+root+"/"+pi.productImagePath+"'/></div>"
-				+"<div class = 'deleteX' onclick = deleteProductImage('"+pi.productImageId+"') ><label>X<label></div>"
-				+"<br/>";
-				$("#productImageBoxDiv").append(htmls);
+				var piPath = pi.productImagePath;
+				console.log(piPath);
+				console.log("onclick = deleteProductImage('"+pi.productImageId+"','"+piPath+"')");
+				var htmls = "<tr><td class = 'imgTd'><img class = 'piImg' src = '"+root+"/"+piPath+"'/></td>"+
+				"<td style = 'width:50%'></td>"+
+				"<td class = 'easyListOperation img_controll'><label>Edit</label></td>"+
+				"<td class = 'easyListOperation img_controll'><label onclick = deleteProductImage('"+pi.productImageId+"','"+piPath+"') >X</label></td></tr>";
+				$("#pi_listBody").append(htmls);
 			})
 		},"json");
 		
@@ -174,11 +181,16 @@
 		$.post(url,{
 			"productId" : productId
 		},function(data) {
-			jQuery.each(data,function(i,pi) {
-				var htmls = "<div><img src = '"+root+"/"+pi.productDetailImagePath+"'/>"
-				+"<div class = 'deleteX' onclick = deleteProductDetailImage('"+pi.productDetailImageId+"') ><label>X<label></div>"
-				+"</div><br/>";
-				$("#productDetailImageBoxDiv").append(htmls);
+			$("#pdi_listBody").html("");
+			jQuery.each(data,function(i,pdi) {
+				var pdiPath = pdi.productDetailImagePath;
+				console.log(pdiPath);
+				console.log("onclick = deleteProductDetailImage('"+pdi.productDetailImageId+"','"+pdiPath+"')");
+				var htmls = "<tr><td class = 'imgTd'><img class = 'piImg' src = '"+root+"/"+pdiPath+"'/></td>"+
+				"<td style = 'width:50%'></td>"+
+				"<td class = 'easyListOperation img_controll'><label>Edit</label></td>"+
+				"<td class = 'easyListOperation img_controll'><label onclick = deleteProductDetailImage('"+pdi.productDetailImageId+"','"+pdiPath+"') >X</label></td></tr>";
+				$("#pdi_listBody").append(htmls);
 			})
 		},"json");
 	}
@@ -233,6 +245,8 @@
 		$("#addCategoryThreeBox option[value="+1+"]").attr("selected",true);		
 		
 	}*/
+
+//商品分类系列-------------------------------------------------------------------------------------------------	
 	
 	//处理一级分类列表
 	function getCategoryOneList(type) {	
@@ -457,15 +471,19 @@
 				$("#pt_addButton").attr("onclick","ptAddBoxChange("+pId+")");
 				$("#pt_listBody").html("");
 				$.each(ptList.data,function(index,pt) {
-					console.log(pt.productTypeImagePath);
+					var ptImage = pt.productTypeImagePath;
+					var imgHtmls = "无";
+					if (ptImage != null && ptImage != "") {
+						imgHtmls = "<img src = '"+root+"/"+ptImage+"'/>";
+					}
 					var ptId = pt.productTypeId;
-					var htmls = "<tr><td id = '#pt"+ptId+"nameTd'>"+pt.productTypeName+"</td>"+
-							"<td class = 'pt_imageTd' id = 'pt"+ptId+"imageTd'><img src = '"+root+"/"+pt.productTypeImagePath+"'/></td>"+
+					var htmls = "<tr class = 'pt_row'><td id = 'pt"+ptId+"nameTd'>"+pt.productTypeName+"</td>"+
+							"<td class = 'pt_imageTd' id = 'pt"+ptId+"imageTd'>"+imgHtmls+"</td>"+
 							"<td id = 'pt"+ptId+"priceTd'>"+pt.price+"</td>"+
  							"<td id = 'pt"+ptId+"salePriceTd'>"+pt.salePrice+"</td><td id = 'pt"+ptId+"rQuantityTd'>"+pt.restQuantity+"</td><td>"+pt.productTypeCreateDate+"</td>"+
  							"<td>"+pt.productName+"</td>"+
- 							"<td class = 'easyListOperation'><label onclick = 'ptEditBoxChange("+ptId+")'>Edit</label></td>"+
- 							"<td class = 'easyListOperation'><label onclick = 'deleteProductType("+ptId+")'>Delete</label></tr>";
+ 							"<td id = 'pt"+ptId+"edit' class = 'easyListOperation'><label onclick = ptEditBoxChange('"+ptId+"','"+ptImage+"')>Edit</label></td>"+
+ 							"<td id = 'pt"+ptId+"delete' class = 'easyListOperation'><label onclick = deleteProductType('"+ptId+"','"+ptImage+"') >Delete</label></tr>";
 					$("#pt_listBody").append(htmls);
 				})
 			}		

@@ -11,6 +11,8 @@ public interface ProductDetailImageDao {
 	
 	public List<ProductDetailImage> getProductDetailImageByProductId(BigInteger productId);
 	
-	public Integer delete(Integer productImageDetailId);
+	public Integer delete(BigInteger productDetailImageId);
+	
+	public Integer add(ProductDetailImage pdi);
 	
 }

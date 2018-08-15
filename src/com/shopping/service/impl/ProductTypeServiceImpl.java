@@ -18,6 +18,7 @@ import com.shopping.entity.ProductType;
 import com.shopping.service.ProductTypeService;
 import com.shopping.util.CommonTools;
 import com.shopping.util.SnowFlake;
+import com.shopping.util.ValTool;
 
 @Service
 public class ProductTypeServiceImpl implements ProductTypeService {
@@ -90,14 +91,16 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
 	@Override
 	public Integer updateProductType(ProductType productType) {
-		// TODO Auto-generated method stub
-		return null;
+		return ptDao.updateProductType(productType);
 	}
 
 	@Override
 	public Integer deleteProductType(BigInteger productTypeId,String pImage) {
-		if (CommonTools.deleteFile(pImage) == false) {
-			return 0;
+		if (pImage != null && !pImage.equals("")) {
+			CommonTools.deleteFile(ValTool.PROJECT_PATH+pImage);
+			if (CommonTools.deleteFile(ValTool.REAL_PATH+pImage) == false) {
+				return 0;
+			}
 		}
 		return ptDao.deleteProductType(productTypeId);
 	}

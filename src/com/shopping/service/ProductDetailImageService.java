@@ -10,5 +10,7 @@ public interface ProductDetailImageService {
 	
 	public List<ProductDetailImage> getProductDetailImageByProductId(BigInteger productId);
 	
-	public Integer delete(Integer productImageDetailId);
+	public Integer delete(BigInteger productImageDetailId);
+	
+	public Integer add(String imagePath,BigInteger pId);
 }

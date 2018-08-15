@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.shopping.dao.ProductDetailImageDao;
+import com.shopping.entity.Product;
 import com.shopping.entity.ProductDetailImage;
 import com.shopping.service.ProductDetailImageService;
 
@@ -28,8 +29,19 @@ public class ProductDetailImageServiceImpl implements ProductDetailImageService 
 	}
 
 	@Override
-	public Integer delete(Integer productImageDetailId) {
+	public Integer delete(BigInteger productImageDetailId) {
 		return pdiDao.delete(productImageDetailId);
+	}
+
+	@Override
+	public Integer add(String imagePath, BigInteger pId) {
+		ProductDetailImage pdi = new ProductDetailImage();
+		Product p = new Product();
+		p.setProductId(pId);
+		pdi.setProduct(p);
+		pdi.setProductDetailImagePath(imagePath);
+		
+		return pdiDao.add(pdi);
 	}
 	
 	

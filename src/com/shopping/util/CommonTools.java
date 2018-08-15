@@ -1,6 +1,7 @@
 package com.shopping.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,4 +47,16 @@ public class CommonTools {
             return false;
         }
     }
+	
+	public static String getProjectPath() {
+		File directory = new File("");// ²ÎÊýÎª¿Õ
+        String courseFile = null;
+		try {
+			courseFile = directory.getCanonicalPath();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return courseFile;
+	}
 }
