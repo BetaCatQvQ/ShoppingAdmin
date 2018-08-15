@@ -165,7 +165,6 @@
 				console.log("onclick = deleteProductImage('"+pi.productImageId+"','"+piPath+"')");
 				var htmls = "<tr><td class = 'imgTd'><img class = 'piImg' src = '"+root+"/"+piPath+"'/></td>"+
 				"<td style = 'width:50%'></td>"+
-				"<td class = 'easyListOperation img_controll'><label>Edit</label></td>"+
 				"<td class = 'easyListOperation img_controll'><label onclick = deleteProductImage('"+pi.productImageId+"','"+piPath+"') >X</label></td></tr>";
 				$("#pi_listBody").append(htmls);
 			})
@@ -188,7 +187,6 @@
 				console.log("onclick = deleteProductDetailImage('"+pdi.productDetailImageId+"','"+pdiPath+"')");
 				var htmls = "<tr><td class = 'imgTd'><img class = 'piImg' src = '"+root+"/"+pdiPath+"'/></td>"+
 				"<td style = 'width:50%'></td>"+
-				"<td class = 'easyListOperation img_controll'><label>Edit</label></td>"+
 				"<td class = 'easyListOperation img_controll'><label onclick = deleteProductDetailImage('"+pdi.productDetailImageId+"','"+pdiPath+"') >X</label></td></tr>";
 				$("#pdi_listBody").append(htmls);
 			})

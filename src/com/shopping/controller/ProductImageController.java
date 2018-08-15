@@ -66,7 +66,10 @@ public class ProductImageController {
 			String rootPath = ValTool.CONTEXT_PATH;
 			relativePath = "/images/productImage/" + newFileName;
 			
-			System.out.println(ValTool.PROJECT_PATH+relativePath);
+			System.out.println("===================================================");
+			System.out.println("ProjectPath:"+ValTool.PROJECT_PATH+relativePath);
+			System.out.println("contentPath:"+contentPath+relativePath);
+			System.out.println("===================================================");
 			imageUtil.writeImage(ValTool.PROJECT_PATH+relativePath);
 			imageUtil.writeImage(contentPath+relativePath);
 		}

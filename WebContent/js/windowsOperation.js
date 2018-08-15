@@ -292,3 +292,10 @@ function ptBoxPageAction(action) {
 	
 	listProductTypes();
 }
+
+//额外---------------------------------------------------------------------------------------------------------
+function sc1(idName) {
+    var d = document.getElementById(idName);
+    d.style.top = (document.documentElement.scrollTop + (document.documentElement.clientHeight - d.offsetHeight) / 2) + "px";
+    d.style.left = (document.documentElement.scrollLeft + (document.documentElement.clientWidth - d.offsetWidth) / 2) + "px";
+}

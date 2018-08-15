@@ -102,25 +102,33 @@
 										<tbody id = "listBody">
 											<c:forEach items="${page.data}" var="p">
 												<tr>
-													<td>${p.productId}</td>
-													<td><img class = "productImageShow" src = "${root}/${p.productImagePath}"></td>
-													<td class = "pPic">${p.productName}</td>
-													<td>${p.restQuantity}</td>
-													<td>${p.productCreateDate}</td>
-
-													<td><a><span
-															class="glyphicon glyphicon-edit" onclick = "showUpdateWindow('edit','${p.productId}')"></span></a></td>
-													<td><a><span
-															class="glyphicon glyphicon-picture" onclick = "showUpdateWindow('imageEdit','${p.productId}')"></span></a></td>
-													<td><a><span
-															class="glyphicon glyphicon-list" onclick = "showUpdateWindow('propertyEdit','${p.productId}')"></span></a></td>
-													<td><a><span
-															class="glyphicon glyphicon-list" onclick = "showUpdateWindow('productTypeEdit','${p.productId}')"></span></a></td>
-													<td><a><span
-															class="glyphicon glyphicon-trash" onclick = "showUpdateWindow('delete','${p.productId}')"></span></a></td>
-												</tr>
+														<td>${p.productId}</td>
+														<td class = "pPic">
+														<c:set var = "piPath" value = "${p.productImagePath}" />
+														<c:choose>
+															<c:when test = "${p.productImagePath == null or p.productImagePath == ''} ">无
+															</c:when>
+															<c:otherwise>
+																<img class = "productImageShow" src = "${root}/${p.productImagePath}" />
+															</c:otherwise>
+														</c:choose>
+														</td>
+														<td>${p.productName}</td>
+														<td>${p.restQuantity}</td>
+														<td>${p.productCreateDate}</td>
 	
-											</c:forEach>
+														<td><a><span
+																class="glyphicon glyphicon-edit" onclick = "showUpdateWindow('edit','${p.productId}')"></span></a></td>
+														<td><a><span
+																class="glyphicon glyphicon-picture" onclick = "showUpdateWindow('imageEdit','${p.productId}')"></span></a></td>
+														<td><a><span
+																class="glyphicon glyphicon-list" onclick = "showUpdateWindow('propertyEdit','${p.productId}')"></span></a></td>
+														<td><a><span
+																class="glyphicon glyphicon-list" onclick = "showUpdateWindow('productTypeEdit','${p.productId}')"></span></a></td>
+														<td><a><span
+																class="glyphicon glyphicon-trash" onclick = "showUpdateWindow('delete','${p.productId}')"></span></a></td>
+													</tr>
+											</c:forEach>	
 										</tbody>
 									</table>
 								</div>
@@ -139,7 +147,7 @@
 					<div id="syy" style="float: left;">
 						<button id="previousPage" type="button" onClick="pageAction('previous')">上一页</button>
 					</div>
-					<b style="float: left;"><lable id="thisPage"></lable>/<lable id="totalPage"></lable></b>
+					<b style="float: left;">1<lable id="thisPage"></lable>/<lable id="totalPage">${page.pageCount }</lable></b>
 					<div id="xyy" style="float: left;">
 						<button id="nextPage" type="button" onClick="pageAction('next')">下一页</button>
 					</div>
@@ -255,7 +263,7 @@
 	    					<tr>
 	    						<td class = "imgTd">图片</td>
 	    						<td></td>
-	    						<td colspan = "2">操作</td>
+	    						<td style = "width:10px;">操作</td>
 	    					</tr>
 	    				</thead>
 	    				<tbody id = "pi_listBody">
@@ -275,7 +283,7 @@
 	    					<tr>
 	    						<td class = "imgTd">图片</td>
 	    						<td></td>
-	    						<td colspan = "2">操作</td>
+	    						<td style = "width:10px;">操作</td>
 	    					</tr>
 	    				</thead>
 	    				<tbody id = "pdi_listBody">
@@ -284,8 +292,9 @@
 	    			</table>
 	    		</div>	
 	    	</div>	
+	    	<button name = "saveImagesManager" id = "saveImagesManager" onclick = "cancelWindow('imageEdit')">关闭</button>
     </div>
-    		<button name = "saveImagesManager" id = "saveImagesManager">关闭</button>
+    		
 			
     
     <!-- 属性管理 -->
@@ -401,13 +410,16 @@
 	<style type = "text/css">
 	
 		.pPic {
-        	width:3px;
-        	height:3px;
+        	width:50px;
+        	height:50px;
+        	margin:0px;
         }
         
-		#productImageShow {
-			max-width:100%;
+		.productImageShow {
+			width:100%;
 			height:auto;
+			padding:0px;
+			margin:0px;
 		}
 		
 		#listBody tr td {
@@ -430,9 +442,10 @@
 		
 		.jumpWindow {
             display: none; 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
+            position:fixed;
+            top: 28%; 
+            left: 38%; 
+            margin:-50px 0 0 -50px;
             width: 40%; 
             height: 65%; 
             padding: 20px; 
@@ -450,7 +463,7 @@
             top: 0%; 
             left: 0%; 
             width: 100%; 
-            height: 1100px; 
+            height: 100%; 
             background-color: black; 
             z-index:1; 
             -moz-opacity: 0.8; 
@@ -597,6 +610,10 @@
         
         .img_controll {
         	width:30px;
+        }
+        
+        #imageEditWindow #saveImagesManager {
+        	text-align:center;
         }
         
 	</style>
